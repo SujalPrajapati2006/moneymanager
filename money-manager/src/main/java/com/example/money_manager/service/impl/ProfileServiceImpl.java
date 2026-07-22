@@ -5,6 +5,7 @@ import com.example.money_manager.dto.request.ProfileDTO;
 import com.example.money_manager.dto.request.RegisterRequest;
 import com.example.money_manager.dto.response.RegisterResponse;
 import com.example.money_manager.entity.ProfileEntity;
+import com.example.money_manager.exception.ResourceAlreadyExistsException;
 import com.example.money_manager.repository.ProfileRepository;
 import com.example.money_manager.service.EmailService;
 import com.example.money_manager.service.ProfileService;
@@ -36,6 +37,9 @@ public class ProfileServiceImpl implements ProfileService {
     private String activationURL;
 
     public RegisterResponse registerProfile(RegisterRequest profileDTO) {
+        if (profileRepository.existsByEmail(profileDTO.getEmail())) {
+            throw new ResourceAlreadyExistsException("An account with this email already exists.");
+        }
         ProfileEntity newProfile = toEntity(profileDTO);
         newProfile.setActivationToken(UUID.randomUUID().toString());
         newProfile = profileRepository.save(newProfile);
