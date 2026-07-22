@@ -2,6 +2,8 @@ package com.example.money_manager.controller;
 
 import com.example.money_manager.dto.request.AuthDTO;
 import com.example.money_manager.dto.request.ProfileDTO;
+import com.example.money_manager.dto.request.RegisterRequest;
+import com.example.money_manager.dto.response.RegisterResponse;
 import com.example.money_manager.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,8 +19,8 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @PostMapping("/register")
-    public ResponseEntity<ProfileDTO> registerProfile(@RequestBody ProfileDTO profileDTO) {
-        ProfileDTO registeredProfile = profileService.registerProfile(profileDTO);
+    public ResponseEntity<?> registerProfile(@RequestBody RegisterRequest profileDTO) {
+        RegisterResponse registeredProfile = profileService.registerProfile(profileDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredProfile);
     }
 

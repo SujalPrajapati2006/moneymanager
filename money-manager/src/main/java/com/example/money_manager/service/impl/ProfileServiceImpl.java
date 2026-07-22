@@ -2,6 +2,8 @@ package com.example.money_manager.service.impl;
 
 import com.example.money_manager.dto.request.AuthDTO;
 import com.example.money_manager.dto.request.ProfileDTO;
+import com.example.money_manager.dto.request.RegisterRequest;
+import com.example.money_manager.dto.response.RegisterResponse;
 import com.example.money_manager.entity.ProfileEntity;
 import com.example.money_manager.repository.ProfileRepository;
 import com.example.money_manager.service.EmailService;
@@ -33,7 +35,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Value("${app.activation.url}")
     private String activationURL;
 
-    public ProfileDTO registerProfile(ProfileDTO profileDTO) {
+    public RegisterResponse registerProfile(RegisterRequest profileDTO) {
         ProfileEntity newProfile = toEntity(profileDTO);
         newProfile.setActivationToken(UUID.randomUUID().toString());
         newProfile = profileRepository.save(newProfile);
@@ -42,29 +44,26 @@ public class ProfileServiceImpl implements ProfileService {
         String subject = "Activate your Money Manager account";
         String body = "Click on the following link to activate your account: " + activationLink;
 //        emailService.sendEmail(newProfile.getEmail(), subject, body);
-        return toDTO(newProfile);
+        return toRegisterResponse(newProfile);
     }
 
-    public ProfileEntity toEntity(ProfileDTO profileDTO) {
+    private ProfileEntity toEntity(RegisterRequest request) {
         return ProfileEntity.builder()
-                .id(profileDTO.getId())
-                .fullName(profileDTO.getFullName())
-                .email(profileDTO.getEmail())
-                .password(passwordEncoder.encode(profileDTO.getPassword()))
-                .profileImageUrl(profileDTO.getProfileImageUrl())
-                .createdAt(profileDTO.getCreatedAt())
-                .updatedAt(profileDTO.getUpdatedAt())
+                .fullName(request.getFullName())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .profileImageUrl(request.getProfileImageUrl())
                 .build();
     }
 
-    public ProfileDTO toDTO(ProfileEntity profileEntity) {
-        return ProfileDTO.builder()
-                .id(profileEntity.getId())
-                .fullName(profileEntity.getFullName())
-                .email(profileEntity.getEmail())
-                .profileImageUrl(profileEntity.getProfileImageUrl())
-                .createdAt(profileEntity.getCreatedAt())
-                .updatedAt(profileEntity.getUpdatedAt())
+    private RegisterResponse toRegisterResponse(ProfileEntity profile) {
+        return RegisterResponse.builder()
+                .id(profile.getId())
+                .fullName(profile.getFullName())
+                .email(profile.getEmail())
+                .profileImageUrl(profile.getProfileImageUrl())
+                .createdAt(profile.getCreatedAt())
+                .updatedAt(profile.getUpdatedAt())
                 .build();
     }
 
