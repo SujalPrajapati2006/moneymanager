@@ -16,6 +16,15 @@ export const useUser = () => {
         let isMounted = true;
 
         const fetchUserInfo = async () => {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                if (isMounted) {
+                    clearUser();
+                    navigate("/login");
+                }
+                return;
+            }
+
             try {
                 const response = await axiosConfig.get(API_ENDPOINTS.GET_USER_INFO);
 
