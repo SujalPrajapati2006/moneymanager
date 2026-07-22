@@ -39,11 +39,11 @@ public class ProfileServiceImpl implements ProfileService {
         ProfileEntity newProfile = toEntity(profileDTO);
         newProfile.setActivationToken(UUID.randomUUID().toString());
         newProfile = profileRepository.save(newProfile);
-        //send activation email
-        String activationLink = activationURL+"/api/v1.0/activate?token=" + newProfile.getActivationToken();
+        // send activation email
+        String activationLink = activationURL + "/api/v1.0/activate?token=" + newProfile.getActivationToken();
         String subject = "Activate your Money Manager account";
         String body = "Click on the following link to activate your account: " + activationLink;
-//        emailService.sendEmail(newProfile.getEmail(), subject, body);
+        // emailService.sendEmail(newProfile.getEmail(), subject, body);
         return toRegisterResponse(newProfile);
     }
 
@@ -86,14 +86,15 @@ public class ProfileServiceImpl implements ProfileService {
     public ProfileEntity getCurrentProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return profileRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new UsernameNotFoundException("Profile not found with email: " + authentication.getName()));
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "Profile not found with email: " + authentication.getName()));
     }
 
     public ProfileDTO getPublicProfile(String email) {
         ProfileEntity currentUser = null;
         if (email == null) {
             currentUser = getCurrentProfile();
-        }else {
+        } else {
             currentUser = profileRepository.findByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException("Profile not found with email: " + email));
         }
@@ -110,13 +111,13 @@ public class ProfileServiceImpl implements ProfileService {
 
     public Map<String, Object> authenticateAndGenerateToken(AuthDTO authDTO) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authDTO.getEmail(), authDTO.getPassword()));
-            //Generate JWT token
+            authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(authDTO.getEmail(), authDTO.getPassword()));
+            // Generate JWT token
             String token = jwtUtil.generateToken(authDTO.getEmail());
             return Map.of(
                     "token", token,
-                    "user", getPublicProfile(authDTO.getEmail())
-            );
+                    "user", getPublicProfile(authDTO.getEmail()));
         } catch (Exception e) {
             throw new RuntimeException("Invalid email or password");
         }
