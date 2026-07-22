@@ -1,12 +1,14 @@
 services:
   - type: web
     name: money-manager
-    runtime: java
+    env: java
     rootDir: money-manager
 
     buildCommand: ./mvnw clean package -DskipTests
 
     startCommand: java -jar target/money-manager-0.0.1-SNAPSHOT.jar
+
+    plan: free
 
     envVars:
       - key: SPRING_PROFILES_ACTIVE
