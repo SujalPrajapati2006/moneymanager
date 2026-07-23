@@ -16,8 +16,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ExpenseServiceImpl implements ExpenseService {
 
     private final CategoryRepository categoryRepository;
@@ -25,6 +28,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     private final ProfileService profileService;
 
     // Adds a new expense to the database
+    @Transactional
     public ExpenseDTO addExpense(ExpenseDTO dto) {
         ProfileEntity profile = profileService.getCurrentProfile();
         CategoryEntity category = categoryRepository.findById(dto.getCategoryId())
@@ -45,6 +49,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     //delete expense by id for current user
+    @Transactional
     public void deleteExpense(Long expenseId) {
         ProfileEntity profile = profileService.getCurrentProfile();
         ExpenseEntity entity = expenseRepository.findById(expenseId)

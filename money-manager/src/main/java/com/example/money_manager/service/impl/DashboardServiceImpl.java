@@ -17,8 +17,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import static java.util.stream.Stream.concat;
 
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class DashboardServiceImpl implements DashboardService {
     private final IncomeService incomeService;
     private final ExpenseService expenseService;
