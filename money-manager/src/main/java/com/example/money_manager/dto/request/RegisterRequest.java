@@ -14,10 +14,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RegisterRequest {
 
-    @NotBlank(message = "fullName is required")
+    @NotBlank(message = "Full name is required")
     private String fullName;
 
-    @NotBlank(message = "email is required")
+    @NotBlank(message = "Email is required")
     @Email(message = "Please enter a valid email address")
     private String email;
 

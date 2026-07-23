@@ -12,6 +12,7 @@ import Header from "../components/Header.jsx";
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [fieldErrors, setFieldErrors] = useState({});
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const {setUser} = useContext(AppContext);
@@ -21,20 +22,26 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+        setFieldErrors({});
+        setError("");
+
+        let errors = {};
         //basic validation
-        if (!validateEmail(email)) {
-            setError("Please enter valid email address");
-            setIsLoading(false);
-            return;
+        if (!email.trim()) {
+            errors.email = "Email is required";
+        } else if (!validateEmail(email)) {
+            errors.email = "Please enter valid email address";
         }
 
         if (!password.trim()) {
-            setError("Please enter your password");
+            errors.password = "Password is required";
+        }
+
+        if (Object.keys(errors).length > 0) {
+            setFieldErrors(errors);
             setIsLoading(false);
             return;
         }
-
-        setError("");
 
         //LOGIN API call
         try {
@@ -82,18 +89,26 @@ const Login = () => {
 
                             <Input
                                 value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                onChange={(e) => {
+                                    setEmail(e.target.value);
+                                    if (fieldErrors.email) setFieldErrors(prev => ({...prev, email: ""}));
+                                }}
                                 label="Email Address"
                                 placeholder="name@example.com"
                                 type="text"
+                                error={fieldErrors.email}
                             />
 
                             <Input
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={(e) => {
+                                    setPassword(e.target.value);
+                                    if (fieldErrors.password) setFieldErrors(prev => ({...prev, password: ""}));
+                                }}
                                 label="Password"
                                 placeholder="*********"
                                 type="password"
+                                error={fieldErrors.password}
                             />
 
                             {error && (

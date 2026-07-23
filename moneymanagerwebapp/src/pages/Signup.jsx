@@ -16,6 +16,7 @@ const Signup = () => {
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [fieldErrors, setFieldErrors] = useState({});
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [profilePhoto, setProfilePhoto] = useState(null);
@@ -26,22 +27,28 @@ const Signup = () => {
         e.preventDefault();
         let profileImageUrl = "";
         setIsLoading(true);
+        setFieldErrors({});
+        setError("");
+
+        let errors = {};
 
         //basic validation
         if (!fullName.trim()) {
-            setError("Please enter your fullname");
-            setIsLoading(false);
-            return;
+            errors.fullName = "Full name is required";
         }
 
-        if (!validateEmail(email)) {
-            setError("Please enter valid email address");
-            setIsLoading(false);
-            return;
+        if (!email.trim()) {
+            errors.email = "Email is required";
+        } else if (!validateEmail(email)) {
+            errors.email = "Please enter valid email address";
         }
 
         if (!password.trim()) {
-            setError("Please enter your password");
+            errors.password = "Password is required";
+        }
+
+        if (Object.keys(errors).length > 0) {
+            setFieldErrors(errors);
             setIsLoading(false);
             return;
         }
@@ -50,8 +57,6 @@ const Signup = () => {
             setIsLoading(false);
             return;
         }
-
-        setError("");
 
         //signup api call
         try {
@@ -74,15 +79,19 @@ const Signup = () => {
         } catch(err) {
             console.error('Something went wrong', err);
             if (err.response?.status === 409) {
-                setError(err.response?.data?.message || "An account with this email already exists.");
-            } else if (err.response?.data?.message) {
-                setError(err.response.data.message);
+                const msg = err.response?.data?.message || "An account with this email already exists.";
+                setFieldErrors(prev => ({ ...prev, email: msg }));
             } else if (err.response?.data && typeof err.response.data === "object") {
-                const errorEntries = Object.entries(err.response.data)
-                    .filter(([key]) => key !== "password")
-                    .map(([, val]) => val);
-                if (errorEntries.length > 0) {
-                    setError(errorEntries.join(", "));
+                const serverFieldErrors = {};
+                Object.entries(err.response.data).forEach(([key, val]) => {
+                    if (key !== "password") {
+                        serverFieldErrors[key] = val;
+                    }
+                });
+                if (Object.keys(serverFieldErrors).length > 0) {
+                    setFieldErrors(serverFieldErrors);
+                } else if (err.response?.data?.message) {
+                    setError(err.response.data.message);
                 }
             } else if (err.response?.data && typeof err.response.data === "string") {
                 setError(err.response.data);
@@ -118,27 +127,39 @@ const Signup = () => {
                             <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
                                 <Input
                                     value={fullName}
-                                    onChange={(e) => setFullName(e.target.value)}
+                                    onChange={(e) => {
+                                        setFullName(e.target.value);
+                                        if (fieldErrors.fullName) setFieldErrors(prev => ({...prev, fullName: ""}));
+                                    }}
                                     label="Full Name"
                                     placeholder="Jhon Doe"
                                     type="text"
+                                    error={fieldErrors.fullName}
                                 />
 
                                 <Input
                                     value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    onChange={(e) => {
+                                        setEmail(e.target.value);
+                                        if (fieldErrors.email) setFieldErrors(prev => ({...prev, email: ""}));
+                                    }}
                                     label="Email Address"
                                     placeholder="name@example.com"
                                     type="text"
+                                    error={fieldErrors.email}
                                 />
 
                                 <div className="col-span-2">
                                     <Input
                                         value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
+                                        onChange={(e) => {
+                                            setPassword(e.target.value);
+                                            if (fieldErrors.password) setFieldErrors(prev => ({...prev, password: ""}));
+                                        }}
                                         label="Password"
                                         placeholder="*********"
                                         type="password"
+                                        error={fieldErrors.password}
                                     />
                                     <PasswordRequirements password={password} />
                                 </div>
