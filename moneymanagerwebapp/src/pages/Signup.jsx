@@ -2,14 +2,15 @@ import {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {assets} from "../assets/assets.js";
 import Input from "../components/Input.jsx";
-import {validateEmail} from "../util/validation.js";
+import {validateEmail, validatePassword} from "../util/validation.js";
 import axiosConfig from "../util/axiosConfig.jsx";
 import {API_ENDPOINTS} from "../util/apiEndpoints.js";
 import toast from "react-hot-toast";
-import {LoaderCircle} from "lucide-react";
+import {LoaderCircle, ArrowRight} from "lucide-react";
 import ProfilePhotoSelector from "../components/ProfilePhotoSelector.jsx";
 import uploadProfileImage from "../util/uploadProfileImage.js";
 import Header from "../components/Header.jsx";
+import PasswordRequirements from "../components/PasswordRequirements.jsx";
 
 const Signup = () => {
     const [fullName, setFullName] = useState("");
@@ -45,6 +46,11 @@ const Signup = () => {
             return;
         }
 
+        if (!validatePassword(password)) {
+            setIsLoading(false);
+            return;
+        }
+
         setError("");
 
         //signup api call
@@ -71,6 +77,13 @@ const Signup = () => {
                 setError(err.response?.data?.message || "An account with this email already exists.");
             } else if (err.response?.data?.message) {
                 setError(err.response.data.message);
+            } else if (err.response?.data && typeof err.response.data === "object") {
+                const errorEntries = Object.entries(err.response.data)
+                    .filter(([key]) => key !== "password")
+                    .map(([, val]) => val);
+                if (errorEntries.length > 0) {
+                    setError(errorEntries.join(", "));
+                }
             } else if (err.response?.data && typeof err.response.data === "string") {
                 setError(err.response.data);
             } else {
@@ -127,6 +140,7 @@ const Signup = () => {
                                         placeholder="*********"
                                         type="password"
                                     />
+                                    <PasswordRequirements password={password} />
                                 </div>
 
                             </div>
@@ -136,14 +150,21 @@ const Signup = () => {
                                 </p>
                             )}
 
-                            <button disabled={isLoading} className={`btn-primary w-full py-3 text-lg font-medium flex items-center justify-center gap-2 ${isLoading ? 'opacity-60 cursor-not-allowed': ''}`} type="submit">
+                            <button
+                                disabled={isLoading}
+                                type="submit"
+                                className="group relative w-full min-h-[48px] h-12 py-3 px-6 rounded-xl font-semibold text-white tracking-wide text-base bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600 hover:from-purple-700 hover:via-violet-700 hover:to-indigo-700 shadow-md shadow-purple-500/25 hover:shadow-lg hover:shadow-purple-500/35 hover:-translate-y-0.5 hover:scale-[1.01] active:scale-[0.98] active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-200 ease-in-out cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none flex items-center justify-center gap-2 overflow-hidden mt-2"
+                            >
                                 {isLoading ? (
                                     <>
-                                        <LoaderCircle className="animate-spin w-5 h-5" />
-                                        Signing Up...
+                                        <LoaderCircle className="animate-spin w-5 h-5 text-white" />
+                                        <span>Creating Account...</span>
                                     </>
-                                ): (
-                                    "SIGN UP"
+                                ) : (
+                                    <>
+                                        <span>SIGN UP</span>
+                                        <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                                    </>
                                 )}
                             </button>
 

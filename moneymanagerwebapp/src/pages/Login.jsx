@@ -6,7 +6,7 @@ import {validateEmail} from "../util/validation.js";
 import axiosConfig from "../util/axiosConfig.jsx";
 import {API_ENDPOINTS} from "../util/apiEndpoints.js";
 import {AppContext} from "../context/AppContext.jsx";
-import {LoaderCircle} from "lucide-react";
+import {LoaderCircle, ArrowRight} from "lucide-react";
 import Header from "../components/Header.jsx";
 
 const Login = () => {
@@ -102,13 +102,22 @@ const Login = () => {
                                 </p>
                             )}
 
-                            <button disabled={isLoading} className={`btn-primary w-full py-3 text-lg font-medium flex items-center justify-center gap-2 ${isLoading ? 'opacity-60 cursor-not-allowed': ''}`} type="submit">
+                            <button
+                                disabled={isLoading}
+                                type="submit"
+                                className="group relative w-full min-h-[48px] h-12 py-3 px-6 rounded-xl font-semibold text-white tracking-wide text-base bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600 hover:from-purple-700 hover:via-violet-700 hover:to-indigo-700 shadow-md shadow-purple-500/25 hover:shadow-lg hover:shadow-purple-500/35 hover:-translate-y-0.5 hover:scale-[1.01] active:scale-[0.98] active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-200 ease-in-out cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none flex items-center justify-center gap-2 overflow-hidden mt-2"
+                            >
                                 {isLoading ? (
                                     <>
-                                        <LoaderCircle className="animate-spin w-5 h-5" />
-                                        Logging in...
+                                        <LoaderCircle className="animate-spin w-5 h-5 text-white" />
+                                        <span>Logging in...</span>
                                     </>
-                                ):("LOGIN")}
+                                ) : (
+                                    <>
+                                        <span>LOGIN</span>
+                                        <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                                    </>
+                                )}
                             </button>
 
                             <p className="text-sm text-slate-800 text-center mt-6">

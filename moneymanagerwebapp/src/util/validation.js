@@ -5,3 +5,11 @@ export const validateEmail = (email) => {
     }
     return false;
 }
+
+export const validatePassword = (password) => {
+    if (password) {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]).{6,10}$/;
+        return regex.test(password);
+    }
+    return false;
+}
