@@ -1,6 +1,7 @@
 package com.example.money_manager.repository;
 
 import com.example.money_manager.entity.IncomeEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,21 +12,54 @@ import java.util.List;
 
 public interface IncomeRepository extends JpaRepository<IncomeEntity, Long> {
 
+
+    @Query("""
+    SELECT i
+    FROM IncomeEntity i
+    JOIN FETCH i.category
+    WHERE i.profile.id = :profileId
+      AND i.date BETWEEN :startDate AND :endDate
+    ORDER BY i.date DESC
+    """)
+    List<IncomeEntity> findByProfileIdAndDateBetweenWithCategory(
+            @Param("profileId") Long profileId,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate
+    );
+
     //select * from tbl_incomes where profile_id = ?1 order by date desc
     List<IncomeEntity> findByProfileIdOrderByDateDesc(Long profileId);
 
     //select * from tbl_incomes where profile_id = ?1 order by date desc limit 5
-    List<IncomeEntity> findTop5ByProfileIdOrderByDateDesc(Long profileId);
+    @Query("""
+    SELECT i
+    FROM IncomeEntity i
+    JOIN FETCH i.category
+    WHERE i.profile.id = :profileId
+    ORDER BY i.date DESC
+    """)
+    List<IncomeEntity> findLatest5WithCategory(
+            @Param("profileId") Long profileId,
+            Pageable pageable
+    );
 
     @Query("SELECT SUM(i.amount) FROM IncomeEntity i WHERE i.profile.id = :profileId")
     BigDecimal findTotalExpenseByProfileId(@Param("profileId") Long profileId);
 
     //select * from tbl_incomes where profile_id = ?1 and date between ?2 and ?3 and name like %?4%
-    List<IncomeEntity> findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(
-            Long profileId,
-            LocalDate startDate,
-            LocalDate endDate,
-            String keyword,
+    @Query("""
+    SELECT i
+    FROM IncomeEntity i
+    JOIN FETCH i.category
+    WHERE i.profile.id = :profileId
+    AND i.date BETWEEN :startDate AND :endDate
+    AND LOWER(i.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+    """)
+    List<IncomeEntity> filterWithCategory(
+            @Param("profileId") Long profileId,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
+            @Param("keyword") String keyword,
             Sort sort
     );
 

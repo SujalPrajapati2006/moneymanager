@@ -9,6 +9,7 @@ import com.example.money_manager.repository.IncomeRepository;
 import com.example.money_manager.service.IncomeService;
 import com.example.money_manager.service.ProfileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +41,12 @@ public class IncomeServiceImpl implements IncomeService {
         LocalDate now = LocalDate.now();
         LocalDate startDate = now.withDayOfMonth(1);
         LocalDate endDate = now.withDayOfMonth(now.lengthOfMonth());
-        List<IncomeEntity> list = incomeRepository.findByProfileIdAndDateBetween(profile.getId(), startDate, endDate);
+        List<IncomeEntity> list =
+                incomeRepository.findByProfileIdAndDateBetweenWithCategory(
+                        profile.getId(),
+                        startDate,
+                        endDate
+                );
         return list.stream().map(this::toDTO).toList();
     }
 
@@ -58,7 +64,11 @@ public class IncomeServiceImpl implements IncomeService {
     // Get latest 5 incomes for current user
     public List<IncomeDTO> getLatest5IncomesForCurrentUser() {
         ProfileEntity profile = profileService.getCurrentProfile();
-        List<IncomeEntity> list = incomeRepository.findTop5ByProfileIdOrderByDateDesc(profile.getId());
+        List<IncomeEntity> list =
+                incomeRepository.findLatest5WithCategory(
+                        profile.getId(),
+                        PageRequest.of(0, 5)
+                );
         return list.stream().map(this::toDTO).toList();
     }
 
@@ -72,7 +82,7 @@ public class IncomeServiceImpl implements IncomeService {
     //filter incomes
     public List<IncomeDTO> filterIncomes(LocalDate startDate, LocalDate endDate, String keyword, Sort sort) {
         ProfileEntity profile = profileService.getCurrentProfile();
-        List<IncomeEntity> list = incomeRepository.findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(profile.getId(), startDate, endDate, keyword, sort);
+        List<IncomeEntity> list = incomeRepository.filterWithCategory(profile.getId(), startDate, endDate, keyword, sort);
         return list.stream().map(this::toDTO).toList();
     }
 

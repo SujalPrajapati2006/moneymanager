@@ -34,7 +34,7 @@ export const useUser = () => {
 
             }catch (error) {
                 console.log("Failed to fetch the user info", error);
-                if (isMounted) {
+                if (isMounted && error.response?.status === 401) {
                     clearUser();
                     navigate("/login");
                 }
