@@ -67,7 +67,15 @@ const Signup = () => {
             }
         } catch(err) {
             console.error('Something went wrong', err);
-            setError(err.message);
+            if (err.response?.status === 409) {
+                setError(err.response?.data?.message || "An account with this email already exists.");
+            } else if (err.response?.data?.message) {
+                setError(err.response.data.message);
+            } else if (err.response?.data && typeof err.response.data === "string") {
+                setError(err.response.data);
+            } else {
+                setError(err.message || "Something went wrong. Please try again.");
+            }
         } finally {
             setIsLoading(false);
         }
