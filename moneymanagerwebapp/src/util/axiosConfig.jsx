@@ -35,7 +35,7 @@ axiosConfig.interceptors.response.use((response) => {
 }, (error) => {
     if(error.response) {
         const isAuthEndpoint = error.config?.url?.includes("/login") || error.config?.url?.includes("/register");
-        if (error.response.status === 401 && !isAuthEndpoint) {
+        if ((error.response.status === 401 || error.response.status === 403) && !isAuthEndpoint) {
             localStorage.removeItem("token");
             window.location.href = "/login";
         } else if (error.response.status === 500) {
