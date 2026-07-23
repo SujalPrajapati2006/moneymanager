@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {Eye, EyeOff} from "lucide-react";
 
-const Input = ({label, value, onChange, placeholder, type, isSelect, options, error}) => {
+const Input = ({label, value, onChange, placeholder, type, isSelect, options, error, disabled}) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const toggleShowPassword = () => {
@@ -15,7 +15,8 @@ const Input = ({label, value, onChange, placeholder, type, isSelect, options, er
             <div className="relative">
                 {isSelect ? (
                     <select
-                        className={`w-full bg-transparent outline-none border ${error ? 'border-red-500' : 'border-gray-300'} rounded-md py-2 px-3 text-gray-700 leading focus:outline-none focus:border-purple-500 transition-colors`}
+                        disabled={disabled}
+                        className={`w-full bg-transparent outline-none border ${error ? 'border-red-500' : 'border-gray-300'} rounded-md py-2 px-3 text-gray-700 leading focus:outline-none focus:border-purple-500 transition-colors disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-slate-100/50`}
                         value={value}
                         onChange={(e) => onChange(e)}
                     >
@@ -27,7 +28,8 @@ const Input = ({label, value, onChange, placeholder, type, isSelect, options, er
                     </select>
                 ): (
                     <input
-                        className={`w-full bg-transparent outline-none border ${error ? 'border-red-500' : 'border-gray-300'} rounded-md py-2 px-3 pr-10 text-gray-700 leading-tight focus:outline-none focus:border-purple-500 transition-colors`}
+                        disabled={disabled}
+                        className={`w-full bg-transparent outline-none border ${error ? 'border-red-500' : 'border-gray-300'} rounded-md py-2 px-3 pr-10 text-gray-700 leading-tight focus:outline-none focus:border-purple-500 transition-colors disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-slate-100/50`}
                         type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
                         placeholder={placeholder}
                         value={value}
@@ -35,21 +37,20 @@ const Input = ({label, value, onChange, placeholder, type, isSelect, options, er
                 )}
 
                 {type === 'password' && (
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer">
+                    <button
+                        type="button"
+                        disabled={disabled}
+                        onClick={toggleShowPassword}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none cursor-pointer p-1 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                        tabIndex={-1}
+                        aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
                         {showPassword ? (
-                            <Eye
-                                size={20}
-                                className="text-primary"
-                                onClick={toggleShowPassword}
-                            />
+                            <Eye size={18} className="text-purple-600" />
                         ) : (
-                            <EyeOff
-                                size={20}
-                                className="text-slate-400"
-                                onClick={toggleShowPassword}
-                            />
+                            <EyeOff size={18} className="text-slate-400" />
                         )}
-                    </span>
+                    </button>
                 )}
             </div>
             {error && (

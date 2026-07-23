@@ -126,6 +126,7 @@ const Signup = () => {
                             </div>
                             <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
                                 <Input
+                                    disabled={isLoading}
                                     value={fullName}
                                     onChange={(e) => {
                                         setFullName(e.target.value);
@@ -138,6 +139,7 @@ const Signup = () => {
                                 />
 
                                 <Input
+                                    disabled={isLoading}
                                     value={email}
                                     onChange={(e) => {
                                         setEmail(e.target.value);
@@ -151,6 +153,7 @@ const Signup = () => {
 
                                 <div className="col-span-2">
                                     <Input
+                                        disabled={isLoading}
                                         value={password}
                                         onChange={(e) => {
                                             setPassword(e.target.value);

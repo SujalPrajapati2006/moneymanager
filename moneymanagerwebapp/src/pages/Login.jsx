@@ -88,6 +88,7 @@ const Login = () => {
                         <form onSubmit={handleSubmit} className="space-y-4">
 
                             <Input
+                                disabled={isLoading}
                                 value={email}
                                 onChange={(e) => {
                                     setEmail(e.target.value);
@@ -100,6 +101,7 @@ const Login = () => {
                             />
 
                             <Input
+                                disabled={isLoading}
                                 value={password}
                                 onChange={(e) => {
                                     setPassword(e.target.value);
