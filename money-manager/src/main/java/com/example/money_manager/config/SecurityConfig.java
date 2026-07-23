@@ -56,6 +56,7 @@ public class SecurityConfig {
         configuration.setAllowedOriginPatterns(List.of(
             "http://localhost:5173",
             "https://*.vercel.app",
+            "https://*.amplifyapp.com",
             frontendUrl
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
