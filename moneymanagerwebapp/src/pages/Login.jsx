@@ -81,9 +81,34 @@ const Login = () => {
                         <h3 className="text-2xl font-semibold text-black text-center mb-2">
                             Welcome Back
                         </h3>
-                        <p className="text-sm text-slate-700 text-center mb-8">
+                        <p className="text-sm text-slate-700 text-center mb-6">
                             Please enter your details to login in
                         </p>
+
+                        {/* Recruiter / Interviewer Demo Credentials Banner */}
+                        <div className="mb-6 p-4 rounded-xl bg-purple-50/80 border border-purple-200/80 text-left shadow-sm">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-xs font-bold uppercase tracking-wider text-purple-700 bg-purple-200/70 px-2 py-0.5 rounded-md flex items-center gap-1">
+                                    🔑 Recruiter / Demo Login
+                                </span>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setEmail("Test@test.com");
+                                        setPassword("Test@#12");
+                                        setFieldErrors({});
+                                        setError(null);
+                                    }}
+                                    className="text-xs font-semibold text-purple-600 hover:text-purple-800 underline cursor-pointer transition-colors"
+                                >
+                                    Auto-fill
+                                </button>
+                            </div>
+                            <div className="text-xs text-slate-700 space-y-1 font-mono">
+                                <div><span className="font-semibold text-slate-500">Email:</span> Test@test.com</div>
+                                <div><span className="font-semibold text-slate-500">Password:</span> Test@#12</div>
+                            </div>
+                        </div>
 
                         <form onSubmit={handleSubmit} className="space-y-4">
 
