@@ -1,7 +1,7 @@
 import moment from "moment";
 
 export const addThousandsSeparator = (num) => {
-    if (num == null || isNaN(num)) return "";
+    if (num == null || isNaN(num) || num === "") return "";
 
     // Convert number to string to handle decimals
     const numStr = num.toString();
@@ -10,21 +10,35 @@ export const addThousandsSeparator = (num) => {
     let integerPart = parts[0];
     let fractionalPart = parts[1];
 
-    // Regex for Indian numbering system
-    // It handles the first three digits, then every two digits
+    // Handle negative sign if present
+    const isNegative = integerPart.startsWith('-');
+    if (isNegative) {
+        integerPart = integerPart.substring(1);
+    }
+
+    // Regex for Indian numbering system (first 3 digits, then groups of 2)
     const lastThree = integerPart.substring(integerPart.length - 3);
     const otherNumbers = integerPart.substring(0, integerPart.length - 3);
 
     if (otherNumbers !== '') {
-        // Apply comma after every two digits for the 'otherNumbers' part
         const formattedOtherNumbers = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',');
         integerPart = formattedOtherNumbers + ',' + lastThree;
     } else {
-        integerPart = lastThree; // No change if less than 4 digits
+        integerPart = lastThree;
     }
 
-    // Combine integer and fractional parts
-    return fractionalPart ? `${integerPart}.${fractionalPart}` : integerPart;
+    const formatted = fractionalPart ? `${integerPart}.${fractionalPart}` : integerPart;
+    return isNegative ? `-${formatted}` : formatted;
+};
+
+/**
+ * Formats a monetary amount into Indian Rupee currency format (e.g. ₹2,00,499)
+ */
+export const formatCurrency = (amount) => {
+    if (amount == null || isNaN(amount) || amount === "") return "₹0";
+    const num = Number(amount);
+    const formatted = addThousandsSeparator(Math.abs(num));
+    return num < 0 ? `-₹${formatted}` : `₹${formatted}`;
 };
 
 export const prepareIncomeLineChartData = (data = []) => {

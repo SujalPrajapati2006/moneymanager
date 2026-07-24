@@ -7,7 +7,7 @@ import {
     CartesianGrid,
     Tooltip,
 } from 'recharts';
-import {addThousandsSeparator} from "../util/util.js";
+import {formatCurrency} from "../util/util.js";
 
 const CustomLineChart = ({ data }) => {
     const CustomTooltip = ({ active, payload, label }) => {
@@ -37,7 +37,7 @@ const CustomLineChart = ({ data }) => {
                     <hr className="my-1 border-gray-200" />
                     {/* Display the total amount for the date */}
                     <p className="text-sm text-gray-700 font-bold mb-2">
-                        Total: <span className="text-purple-800">&#8377;{addThousandsSeparator(dataPoint.totalAmount)}</span>
+                        Total: <span className="text-purple-800">{formatCurrency(dataPoint.totalAmount)}</span>
                     </p>
 
                     {/* Iterate over the newly grouped categories for a consolidated view */}
@@ -47,7 +47,7 @@ const CustomLineChart = ({ data }) => {
                             {categoriesInTooltip.map((groupedItem, index) => (
                                 <div key={index} className="flex justify-between text-xs text-gray-700">
                                     <span>{groupedItem.categoryName}:</span>
-                                    <span>&#8377;{addThousandsSeparator(groupedItem.totalAmount)}</span>
+                                    <span>{formatCurrency(groupedItem.totalAmount)}</span>
                                 </div>
                             ))}
                         </div>
