@@ -6,31 +6,30 @@ const Modal = ({ isOpen, onClose, children, title }) => {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex justify-center items-center w-full h-full overflow-hidden bg-black/40
-      backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex justify-center items-center p-3 sm:p-4 w-full h-full bg-black/50 backdrop-blur-xs animate-in fade-in duration-200"
+            onClick={(e) => {
+                if (e.target === e.currentTarget) onClose();
+            }}
         >
-            <div className="relative p-4 w-full max-w-2xl max-h-[90vh]">
+            <div className="relative w-full max-w-lg sm:max-w-xl max-h-[90vh] flex flex-col bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
                 {/* Modal header */}
-                <div className="relative bg-white rounded-xl shadow-2xl border border-gray-100">
-                    {/* Modal content */}
-                    <div className="flex items-center justify-between p-5 md:p-6 border-b border-gray-100 rounded-t-xl">
-                        <h3 className="text-xl font-semibold text-gray-800">
-                            {title}
-                        </h3>
+                <div className="flex items-center justify-between p-4 sm:p-5 border-b border-gray-100 shrink-0 bg-gray-50/50">
+                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 truncate">
+                        {title}
+                    </h3>
 
-                        <button
-                            type="button"
-                            className="text-gray-500 bg-gray-50 hover:bg-gray-100 hover:text-gray-700 rounded-lg text-sm w-9 h-9 flex justify-center items-center transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                            onClick={onClose}
-                        >
-                            <X className="w-4 h-4" />
-                        </button>
-                    </div>
+                    <button
+                        type="button"
+                        className="text-gray-400 hover:bg-gray-100 hover:text-gray-600 rounded-full p-2 transition-colors cursor-pointer"
+                        onClick={onClose}
+                    >
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
 
-                    {/*Modal body*/}
-                    <div className="p-5 md:p-6 text-gray-700">
-                        {children}
-                    </div>
+                {/* Modal body (scrollable on mobile) */}
+                <div className="p-4 sm:p-6 text-gray-700 overflow-y-auto max-h-[calc(90vh-70px)]">
+                    {children}
                 </div>
             </div>
         </div>

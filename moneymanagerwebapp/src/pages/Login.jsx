@@ -69,20 +69,19 @@ const Login = () => {
     }
 
     return (
-        <div className="h-screen w-full flex flex-col">
+        <div className="min-h-screen w-full flex flex-col bg-slate-50">
             <Header />
-            <div className="flex-grow w-full relative flex items-center justify-center overflow-hidden">
+            <div className="flex-grow w-full relative flex items-center justify-center py-8 px-4 sm:px-6 overflow-y-auto">
                 {/* Background image with blur*/}
                 <img src={assets.login_bg} alt="Background" className="absolute inset-0 w-full h-full object-cover filter blur-sm" />
 
-                <div className="relative z-10 w-full max-w-md px-6">
-
-                    <div className="bg-white bg-opacity-95 backdrop-blur-sm rounded-lg shadow-2xl p-8">
-                        <h3 className="text-2xl font-semibold text-black text-center mb-2">
+                <div className="relative z-10 w-full max-w-md">
+                    <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 sm:p-8 border border-gray-100">
+                        <h3 className="text-xl sm:text-2xl font-semibold text-black text-center mb-2">
                             Welcome Back
                         </h3>
-                        <p className="text-sm text-slate-700 text-center mb-6">
-                            Please enter your details to login in
+                        <p className="text-xs sm:text-sm text-slate-600 text-center mb-6">
+                            Please enter your details to log in
                         </p>
 
                         {/* Recruiter / Interviewer Demo Credentials Banner */}

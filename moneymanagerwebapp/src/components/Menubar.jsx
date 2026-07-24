@@ -135,11 +135,33 @@ const Menubar = ({ activeMenu }) => {
                 )}
             </div>
 
-            {/* Mobile side menu */}
+            {/* Mobile side menu drawer and backdrop */}
             {openSideMenu && (
-                <div className="fixed top-[73px] left-0 right-0 bg-white border-b border-gray-200 lg:hidden z-20">
-                    <Sidebar activeMenu={activeMenu} />
-                </div>
+                <>
+                    {/* Backdrop */}
+                    <div
+                        className="fixed inset-0 bg-black/50 backdrop-blur-xs z-40 lg:hidden"
+                        onClick={() => setOpenSideMenu(false)}
+                    />
+                    {/* Drawer */}
+                    <div className="fixed top-0 left-0 bottom-0 w-72 max-w-[85vw] bg-white z-50 shadow-2xl overflow-y-auto lg:hidden">
+                        <div className="flex items-center justify-between p-4 border-b border-gray-100">
+                            <div className="flex items-center gap-2">
+                                <img src={assets.logo} alt="logo" className="h-8 w-8" />
+                                <span className="text-base font-semibold text-black">Money Manager</span>
+                            </div>
+                            <button
+                                onClick={() => setOpenSideMenu(false)}
+                                className="p-1.5 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 cursor-pointer"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+                        <div className="p-2">
+                            <Sidebar activeMenu={activeMenu} onItemClick={() => setOpenSideMenu(false)} />
+                        </div>
+                    </div>
+                </>
             )}
         </div>
     );
