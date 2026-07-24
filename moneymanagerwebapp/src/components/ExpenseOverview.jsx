@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {Plus} from "lucide-react";
 import CustomLineChart from "./CustomLineChart.jsx";
 import {prepareIncomeLineChartData} from "../util/util.js";
+import Button from "./Button.jsx";
 
 const ExpenseOverview = ({transactions, onExpenseIncome}) => {
     const [chartData, setChartData] = useState([]);
@@ -24,10 +25,9 @@ const ExpenseOverview = ({transactions, onExpenseIncome}) => {
                     </p>
                 </div>
 
-                <button className="add-btn" onClick={onExpenseIncome}>
-                    <Plus size={15} className="text-lg" />
+                <Button onClick={onExpenseIncome} icon={Plus}>
                     Add Expense
-                </button>
+                </Button>
             </div>
 
             <div className="mt-10">

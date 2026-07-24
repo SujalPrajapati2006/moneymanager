@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
 import EmojiPickerPopup from "./EmojiPickerPopup.jsx";
 import Input from "./Input.jsx";
+import { Plus } from "lucide-react";
+import Button from "./Button.jsx";
 
 // Add 'categories' prop
 const AddExpenseForm = ({ onAddExpense, categories }) => {
     const [expense, setExpense] = useState({ // Renamed 'income' state to 'expense' for clarity
-        name,
+        name: "",
         categoryId: "", // Changed from 'category' to 'categoryId'
         amount: "",
         date: "",
         icon: "", // Icon might be associated with the selected category, or kept separate for custom entries
     });
+    const [loading, setLoading] = useState(false);
 
     // Effect to set a default category if categories are loaded and none is selected
     useEffect(() => {
@@ -21,6 +24,15 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
     }, [categories, expense.categoryId]);
 
     const handleChange = (key, value) => setExpense({ ...expense, [key]: value }); // Changed setIncome to setExpense
+
+    const handleAddExpense = async () => {
+        setLoading(true);
+        try {
+            await onAddExpense(expense);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     // Map categories to the format expected by the reusable Input dropdown
     const categoryOptions = categories.map((cat) => ({
@@ -38,8 +50,8 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
             <Input
                 value={expense.name}
                 onChange={({ target }) => handleChange("name", target.value)}
-                label="Income Source"
-                placeholder="e.g., Electricity, Wifi"
+                label="Expense Title"
+                placeholder="e.g., Electricity, Wifi, Groceries"
                 type="text"
             />
 
@@ -69,13 +81,15 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
             />
 
             <div className="flex justify-end mt-6">
-                <button
+                <Button
                     type="button"
-                    className="add-btn add-btn-fill"
-                    onClick={() => onAddExpense(expense)} // Changed income to expense
+                    onClick={handleAddExpense}
+                    loading={loading}
+                    disabled={loading}
+                    icon={loading ? null : Plus}
                 >
-                    Add Expense
-                </button>
+                    {loading ? "Adding..." : "Add Expense"}
+                </Button>
             </div>
         </div>
     );

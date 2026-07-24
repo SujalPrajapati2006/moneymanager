@@ -1,7 +1,8 @@
 import {useEffect, useState} from "react";
 import EmojiPickerPopup from "./EmojiPickerPopup.jsx";
 import Input from "./Input.jsx";
-import {LoaderCircle} from "lucide-react";
+import {Plus} from "lucide-react";
+import Button from "./Button.jsx";
 
 const AddIncomeForm = ({onAddIncome, categories}) => {
     const [income, setIncome] = useState({
@@ -77,21 +78,15 @@ const AddIncomeForm = ({onAddIncome, categories}) => {
             />
 
             <div className="flex justify-end mt-6">
-                <button
+                <Button
+                    type="button"
                     onClick={handleAddIncome}
+                    loading={loading}
                     disabled={loading}
-                    className="add-btn add-btn-fill">
-                    {loading ? (
-                        <>
-                            <LoaderCircle className="w-4 h-4 animate-spin"/>
-                            Adding...
-                        </>
-                    ): (
-                        <>
-                            Add Income
-                        </>
-                    )}
-                </button>
+                    icon={loading ? null : Plus}
+                >
+                    {loading ? "Adding..." : "Add Income"}
+                </Button>
             </div>
         </div>
     )

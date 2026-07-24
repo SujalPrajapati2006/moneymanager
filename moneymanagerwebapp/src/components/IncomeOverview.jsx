@@ -2,12 +2,12 @@ import {useEffect, useState} from "react";
 import {prepareIncomeLineChartData} from "../util/util.js";
 import CustomLineChart from "./CustomLineChart.jsx";
 import {Plus} from "lucide-react";
+import Button from "./Button.jsx";
 
 const IncomeOverview = ({transactions, onAddIncome}) => {
     const [chartData, setChartData] = useState([]);
     useEffect(() => {
         const result = prepareIncomeLineChartData(transactions);
-        console.log(result);
         setChartData(result);
 
         return () => {};
@@ -23,9 +23,9 @@ const IncomeOverview = ({transactions, onAddIncome}) => {
                         Track your earnings over time and analyze your income trends.
                     </p>
                 </div>
-                <button className="add-btn" onClick={onAddIncome}>
-                    <Plus size={15} className="text-lg" /> Add Income
-                </button>
+                <Button onClick={onAddIncome} icon={Plus}>
+                    Add Income
+                </Button>
             </div>
             <div className="mt-10">
                 <CustomLineChart data={chartData} />
