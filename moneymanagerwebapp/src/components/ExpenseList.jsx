@@ -1,12 +1,25 @@
 import moment from "moment";
-import {Download, Mail} from "lucide-react";
+import {Download, Mail, Coins} from "lucide-react";
 import TransactionInfoCard from "./TransactionInfoCard.jsx";
+import {EmptyState} from "./StateCard.jsx";
 
-const ExpenseList = ({ transactions, onDelete, onDownload, onEmail }) => {
+const ExpenseList = ({ transactions, onDelete, onDownload, onEmail, onAddExpense }) => {
+    if (!transactions || transactions.length === 0) {
+        return (
+            <EmptyState
+                title="No expenses recorded yet"
+                description="Start tracking your daily expenses, bills, and payments."
+                icon={Coins}
+                actionLabel="Add Expense"
+                onAction={onAddExpense}
+            />
+        );
+    }
+
     return (
         <div className="card">
-            <div className="flex items-center justify-between">
-                <h5 className="text-lg">All Expanses</h5>
+            <div className="flex items-center justify-between mb-4">
+                <h5 className="text-lg font-semibold">All Expenses</h5>
                 <div className="flex items-center justify-end gap-2">
                     <button className="card-btn" onClick={onEmail}>
                         <Mail size={15} className="text-base" /> Email
@@ -17,7 +30,7 @@ const ExpenseList = ({ transactions, onDelete, onDownload, onEmail }) => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {transactions?.map((expense) => (
                     <TransactionInfoCard
                         key={expense.id}

@@ -9,6 +9,7 @@ import {API_ENDPOINTS} from "../util/apiEndpoints.js";
 import toast from "react-hot-toast";
 import RecentTransactions from "../components/RecentTransactions.jsx";
 import FinanceOverview from "../components/FinanceOverview.jsx";
+import {LoadingState, ErrorState} from "../components/StateCard.jsx";
 
 const Home = () => {
     useUser();
@@ -16,71 +17,82 @@ const Home = () => {
     const navigate = useNavigate();
     const [dashboardData, setDashboardData] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     const fetchDashboardData = async () => {
-        if (loading) return;
-
         setLoading(true);
+        setError(null);
 
         try {
             const response = await axiosConfig.get(API_ENDPOINTS.DASHBOARD_DATA);
             if (response.status === 200) {
                 setDashboardData(response.data);
             }
-        }catch (error) {
-            console.error('Something went wrong while fetching dashboard data:', error);
-            toast.error('Something went wrong!');
+        }catch (err) {
+            console.error('Something went wrong while fetching dashboard data:', err);
+            setError(err.response?.data?.message || "Couldn't load dashboard data. Please try again.");
+            toast.error('Failed to load dashboard data');
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     useEffect(() => {
         fetchDashboardData();
-        return () => {};
     }, []);
 
     return (
         <div>
             <Dashboard activeMenu="Dashboard">
                 <div className="my-5 mx-auto space-y-6">
-                    {/* Top Summary Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <InfoCard
-                            icon={<WalletCards />}
-                            label="Total Balance"
-                            value={dashboardData?.totalBalance || 0}
-                            color="bg-purple-800"
-                        />
-                        <InfoCard
-                            icon={<Wallet />}
-                            label="Total Income"
-                            value={dashboardData?.totalIncome || 0}
-                            color="bg-green-800"
-                        />
-                        <InfoCard
-                            icon={<Coins />}
-                            label="Total Expense"
-                            value={dashboardData?.totalExpense || 0}
-                            color="bg-red-800"
-                        />
-                    </div>
+                    {loading && <LoadingState message="Fetching your financial overview..." />}
 
-                    {/* Coherent Main Dashboard Section */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        {/* Financial Overview Donut Chart */}
-                        <FinanceOverview
-                            totalBalance={dashboardData?.totalBalance || 0}
-                            totalIncome={dashboardData?.totalIncome || 0}
-                            totalExpense={dashboardData?.totalExpense || 0}
+                    {error && !loading && (
+                        <ErrorState
+                            message={error}
+                            onRetry={fetchDashboardData}
                         />
+                    )}
 
-                        {/* Unified Recent Transactions Feed (max 5 items) */}
-                        <RecentTransactions
-                            transactions={dashboardData?.recentTransactions}
-                            onMore={() => navigate("/expense")}
-                        />
-                    </div>
+                    {!loading && !error && (
+                        <>
+                            {/* Top Summary Cards */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <InfoCard
+                                    icon={<WalletCards />}
+                                    label="Total Balance"
+                                    value={dashboardData?.totalBalance || 0}
+                                    color="bg-purple-800"
+                                />
+                                <InfoCard
+                                    icon={<Wallet />}
+                                    label="Total Income"
+                                    value={dashboardData?.totalIncome || 0}
+                                    color="bg-green-800"
+                                />
+                                <InfoCard
+                                    icon={<Coins />}
+                                    label="Total Expense"
+                                    value={dashboardData?.totalExpense || 0}
+                                    color="bg-red-800"
+                                />
+                            </div>
+
+                            {/* Main Dashboard Section */}
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <FinanceOverview
+                                    totalBalance={dashboardData?.totalBalance || 0}
+                                    totalIncome={dashboardData?.totalIncome || 0}
+                                    totalExpense={dashboardData?.totalExpense || 0}
+                                />
+
+                                <RecentTransactions
+                                    transactions={dashboardData?.recentTransactions}
+                                    onMore={() => navigate("/expense")}
+                                />
+                            </div>
+                        </>
+                    )}
                 </div>
             </Dashboard>
         </div>

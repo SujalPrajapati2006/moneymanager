@@ -1,9 +1,10 @@
-import {Download, LoaderCircle, Mail} from "lucide-react";
+import {Download, LoaderCircle, Mail, Wallet} from "lucide-react";
 import TransactionInfoCard from "./TransactionInfoCard.jsx";
 import moment from "moment";
 import {useState} from "react";
+import {EmptyState} from "./StateCard.jsx";
 
-const IncomeList = ({transactions, onDelete, onDownload, onEmail}) => {
+const IncomeList = ({transactions, onDelete, onDownload, onEmail, onAddIncome}) => {
     const [loading, setLoading] = useState(false);
     const handleEmail = async () => {
         setLoading(true);
@@ -21,10 +22,23 @@ const IncomeList = ({transactions, onDelete, onDownload, onEmail}) => {
             setLoading(false);
         }
     }
+
+    if (!transactions || transactions.length === 0) {
+        return (
+            <EmptyState
+                title="No income recorded yet"
+                description="Start tracking your salary, freelancing, and other income sources."
+                icon={Wallet}
+                actionLabel="Add Income"
+                onAction={onAddIncome}
+            />
+        );
+    }
+
     return (
         <div className="card">
-            <div className="flex items-center justify-between">
-                <h5 className="text-lg">Income Sources</h5>
+            <div className="flex items-center justify-between mb-4">
+                <h5 className="text-lg font-semibold">Income Sources</h5>
                 <div className="flex items-center justify-end gap-2">
                     <button disabled={loading} className="card-btn" onClick={handleEmail}>
                         {loading ? (
@@ -51,13 +65,11 @@ const IncomeList = ({transactions, onDelete, onDownload, onEmail}) => {
                                 Download
                             </>
                         )}
-
                     </button>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2">
-                {/* display the incomes */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {transactions?.map((income) => (
                     <TransactionInfoCard
                         key={income.id}
@@ -71,7 +83,7 @@ const IncomeList = ({transactions, onDelete, onDownload, onEmail}) => {
                 ))}
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default IncomeList;

@@ -6,16 +6,17 @@ import {API_ENDPOINTS} from "../util/apiEndpoints.js";
 import toast from "react-hot-toast";
 import IncomeList from "../components/IncomeList.jsx";
 import Modal from "../components/Modal.jsx";
-import {Plus} from "lucide-react";
 import AddIncomeForm from "../components/AddIncomeForm.jsx";
 import DeleteAlert from "../components/DeleteAlert.jsx";
 import IncomeOverview from "../components/IncomeOverview.jsx";
+import {LoadingState, ErrorState} from "../components/StateCard.jsx";
 
 const Income = () => {
     useUser();
     const [incomeData, setIncomeData] = useState([]);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     const [openAddIncomeModal, setOpenAddIncomeModal] = useState(false);
     const [openDeleteAlert, setOpenDeleteAlert] = useState({
@@ -25,18 +26,18 @@ const Income = () => {
 
     // Fetch income details from the API
     const fetchIncomeDetails = async () => {
-        if (loading) return;
-
         setLoading(true);
+        setError(null);
 
         try {
             const response = await axiosConfig.get(API_ENDPOINTS.GET_ALL_INCOMES);
             if (response.status === 200) {
-               setIncomeData(response.data);
+               setIncomeData(response.data || []);
             }
-        }catch(error) {
-            console.error('Failed to fetch income details:', error);
-            toast.error(error.response?.data?.message || "Failed to fetch income details");
+        }catch(err) {
+            console.error('Failed to fetch income details:', err);
+            setError(err.response?.data?.message || "Couldn't load income data. Please try again.");
+            toast.error("Failed to fetch income details");
         }finally {
             setLoading(false);
         }
@@ -47,11 +48,10 @@ const Income = () => {
         try {
             const response = await axiosConfig.get(API_ENDPOINTS.CATEGORY_BY_TYPE("income"));
             if (response.status === 200) {
-                setCategories(response.data);
+                setCategories(response.data || []);
             }
-        }catch(error) {
-            console.log('Failed to fetch income categories:', error);
-            toast.error(error.data?.message || "Failed to fetch income categories");
+        }catch(err) {
+            console.log('Failed to fetch income categories:', err);
         }
     }
 
@@ -59,7 +59,6 @@ const Income = () => {
     const handleAddIncome = async (income) => {
         const {name, amount, date, icon, categoryId} = income;
 
-        //validation
         if (!name.trim()) {
             toast.error("Please enter a name");
             return;
@@ -93,7 +92,7 @@ const Income = () => {
                 date,
                 icon,
                 categoryId,
-            })
+            });
             if (response.status === 201) {
                 setOpenAddIncomeModal(false);
                 toast.success("Income added successfully");
@@ -102,7 +101,7 @@ const Income = () => {
             }
         }catch(error){
             console.log('Error adding income', error);
-            toast.error(error.response?.data?.message || "Failed to adding income");
+            toast.error(error.response?.data?.message || "Failed to add income");
         }
     }
 
@@ -131,7 +130,7 @@ const Income = () => {
             link.click();
             link.parentNode.removeChild(link);
             window.URL.revokeObjectURL(url);
-            toast.success("Download income details successfully");
+            toast.success("Downloaded income details successfully");
         }catch(error) {
             console.error('Error downloading income details:', error);
             toast.error(error.response?.data?.message || "Failed to download income");
@@ -152,24 +151,37 @@ const Income = () => {
 
     useEffect(() => {
         fetchIncomeDetails();
-        fetchIncomeCategories()
+        fetchIncomeCategories();
     }, []);
 
     return (
         <Dashboard activeMenu="Income">
             <div className="my-5 mx-auto">
                 <div className="grid grid-cols-1 gap-6">
-                    <div>
-                        {/* overview for income with line char */}
-                        <IncomeOverview transactions={incomeData} onAddIncome={() => setOpenAddIncomeModal(true)} />
-                    </div>
+                    {loading && <LoadingState message="Loading income records..." />}
 
-                    <IncomeList
-                        transactions={incomeData}
-                        onDelete={(id) => setOpenDeleteAlert({show: true, data: id})}
-                        onDownload={handleDownloadIncomeDetails}
-                        onEmail={handleEmailIncomeDetails}
-                    />
+                    {error && !loading && (
+                        <ErrorState
+                            message={error}
+                            onRetry={fetchIncomeDetails}
+                        />
+                    )}
+
+                    {!loading && !error && (
+                        <>
+                            <div>
+                                <IncomeOverview transactions={incomeData} onAddIncome={() => setOpenAddIncomeModal(true)} />
+                            </div>
+
+                            <IncomeList
+                                transactions={incomeData}
+                                onDelete={(id) => setOpenDeleteAlert({show: true, data: id})}
+                                onDownload={handleDownloadIncomeDetails}
+                                onEmail={handleEmailIncomeDetails}
+                                onAddIncome={() => setOpenAddIncomeModal(true)}
+                            />
+                        </>
+                    )}
 
                     {/* Add Income Modal */}
                     <Modal
@@ -197,7 +209,7 @@ const Income = () => {
                 </div>
             </div>
         </Dashboard>
-    )
-}
+    );
+};
 
 export default Income;
