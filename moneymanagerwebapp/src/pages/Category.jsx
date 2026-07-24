@@ -8,6 +8,7 @@ import {API_ENDPOINTS} from "../util/apiEndpoints.js";
 import toast from "react-hot-toast";
 import Modal from "../components/Modal.jsx";
 import AddCategoryForm from "../components/AddCategoryForm.jsx";
+import Button from "../components/Button.jsx";
 
 const Category = () => {
     useUser();
@@ -106,12 +107,12 @@ const Category = () => {
                 {/* Add button to add category*/}
                 <div className="flex justify-between items-center mb-5">
                     <h2 className="text-2xl font-semibold">All Categories</h2>
-                    <button
+                    <Button
                         onClick={() => setOpenAddCategoryModal(true)}
-                        className="add-btn flex items-center gap-1">
-                        <Plus size={15} />
+                        icon={Plus}
+                    >
                         Add Category
-                    </button>
+                    </Button>
                 </div>
 
                 {/* Category list */}

@@ -1,7 +1,8 @@
 import {useEffect, useState} from "react";
 import Input from "./Input.jsx";
 import EmojiPickerPopup from "./EmojiPickerPopup.jsx";
-import {LoaderCircle} from "lucide-react";
+import {Plus} from "lucide-react";
+import Button from "./Button.jsx";
 
 const AddCategoryForm = ({onAddCategory, initialCategoryData, isEditing}) => {
     const [category, setCategory] = useState({
@@ -61,22 +62,17 @@ const AddCategoryForm = ({onAddCategory, initialCategoryData, isEditing}) => {
             />
 
             <div className="flex justify-end mt-6">
-                <button
+                <Button
                     type="button"
                     onClick={handleSubmit}
+                    loading={loading}
                     disabled={loading}
-                    className="add-btn add-btn-fill">
-                    {loading ? (
-                        <>
-                            <LoaderCircle className="w-4 h-4 animate-spin"/>
-                            {isEditing ? "Updating..." : "Adding..."}
-                        </>
-                    ): (
-                        <>
-                            {isEditing ? "Update Category" : "Add Category"}
-                        </>
-                    )}
-                </button>
+                    icon={loading ? null : Plus}
+                >
+                    {loading
+                        ? (isEditing ? "Updating..." : "Adding...")
+                        : (isEditing ? "Update Category" : "Add Category")}
+                </Button>
             </div>
         </div>
 
