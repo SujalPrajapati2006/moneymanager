@@ -94,7 +94,7 @@ const Login = () => {
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        setEmail("Test@test.com");
+                                        setEmail("test@test.com");
                                         setPassword("Test@#12");
                                         setFieldErrors({});
                                         setError(null);
@@ -105,7 +105,7 @@ const Login = () => {
                                 </button>
                             </div>
                             <div className="text-xs text-slate-700 space-y-1 font-mono">
-                                <div><span className="font-semibold text-slate-500">Email:</span> Test@test.com</div>
+                                <div><span className="font-semibold text-slate-500">Email:</span> test@test.com</div>
                                 <div><span className="font-semibold text-slate-500">Password:</span> Test@#12</div>
                             </div>
                         </div>
