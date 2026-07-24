@@ -66,38 +66,56 @@ const Menubar = ({ activeMenu }) => {
             </div>
 
             {/* Right side - Avatar dropdown */}
-            <div className="relative" ref={dropdownRef}>
+            <div className="relative shrink-0" ref={dropdownRef}>
                 <button
                     onClick={toggleDropdown}
-                    className="flex items-center justify-center w-10 h-10 bg-gray-100 hover:bg-gray-200
-                    rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-800
-                    focus:ring-offset-2"
+                    className="flex items-center gap-2.5 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 border border-gray-200/80 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-800 focus:ring-offset-1 cursor-pointer max-w-[180px] sm:max-w-[220px]"
+                    aria-label="User profile menu"
                 >
-                    <img src={user?.profileImageUrl} alt="profile" className="w-10 h-10 rounded-full"/>
+                    <div className="w-8 h-8 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center overflow-hidden shrink-0 font-semibold text-xs border border-purple-200">
+                        {user?.profileImageUrl ? (
+                            <img
+                                src={user.profileImageUrl}
+                                alt={user?.fullName || "Profile"}
+                                className="w-full h-full object-cover rounded-full"
+                                onError={(e) => { e.target.style.display = 'none'; }}
+                            />
+                        ) : user?.fullName ? (
+                            <span>{user.fullName.charAt(0).toUpperCase()}</span>
+                        ) : (
+                            <User className="w-4 h-4 text-purple-700" />
+                        )}
+                    </div>
+                    <span className="text-sm font-medium text-gray-700 truncate max-w-[90px] sm:max-w-[140px]">
+                        {user?.fullName || "Profile"}
+                    </span>
                 </button>
 
                 {/* Dropdown Menu */}
                 {showDropdown && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
-                        {/* User info section (optional) */}
+                    <div className="absolute right-0 mt-2 w-56 sm:w-64 bg-white rounded-xl shadow-xl border border-gray-200 py-1 z-50 animate-in fade-in duration-150">
+                        {/* User info section */}
                         <div className="px-4 py-3 border-b border-gray-100">
                             <div className="flex items-center gap-3">
-                                <div className="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full">
-                                    {user? (
-                                        <>
-                                            <img src={user.profileImageUrl} alt="profile" />
-                                        </>
-                                    ): (
-                                        <>
-                                            <User className="w-4 h-4 text-purple-600"/>
-                                        </>
+                                <div className="w-9 h-9 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center overflow-hidden shrink-0 font-semibold text-sm border border-purple-200">
+                                    {user?.profileImageUrl ? (
+                                        <img
+                                            src={user.profileImageUrl}
+                                            alt={user?.fullName || "User"}
+                                            className="w-full h-full object-cover rounded-full"
+                                            onError={(e) => { e.target.style.display = 'none'; }}
+                                        />
+                                    ) : user?.fullName ? (
+                                        <span>{user.fullName.charAt(0).toUpperCase()}</span>
+                                    ) : (
+                                        <User className="w-4.5 h-4.5 text-purple-700" />
                                     )}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-medium text-gray-900 truncate">
-                                        {user.fullName}
+                                    <p className="text-sm font-semibold text-gray-900 truncate">
+                                        {user?.fullName || "User"}
                                     </p>
-                                    <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                                    <p className="text-xs text-gray-500 truncate mt-0.5">{user?.email || ""}</p>
                                 </div>
                             </div>
                         </div>

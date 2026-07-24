@@ -124,7 +124,7 @@ const Signup = () => {
                             <div className="flex justify-center mb-6">
                                 <ProfilePhotoSelector image={profilePhoto} setImage={setProfilePhoto} />
                             </div>
-                            <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <Input
                                     disabled={isLoading}
                                     value={fullName}
@@ -151,7 +151,7 @@ const Signup = () => {
                                     error={fieldErrors.email}
                                 />
 
-                                <div className="col-span-2">
+                                <div className="col-span-1 sm:col-span-2">
                                     <Input
                                         disabled={isLoading}
                                         value={password}

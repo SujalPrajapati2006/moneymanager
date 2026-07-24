@@ -29,7 +29,7 @@ const Input = ({label, value, onChange, placeholder, type, isSelect, options, er
                 ): (
                     <input
                         disabled={disabled}
-                        className={`w-full bg-transparent outline-none border ${error ? 'border-red-500' : 'border-gray-300'} rounded-md py-2 px-3 pr-10 text-gray-700 leading-tight focus:outline-none focus:border-purple-500 transition-colors disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-slate-100/50`}
+                        className={`w-full bg-transparent outline-none border ${error ? 'border-red-500' : 'border-gray-300'} rounded-md py-2 px-3 ${type === 'password' ? 'pr-10' : 'pr-3'} text-sm text-gray-700 leading-tight focus:outline-none focus:border-purple-500 transition-colors disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-slate-100/50 placeholder:text-slate-400 placeholder:text-sm`}
                         type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
                         placeholder={placeholder}
                         value={value}
