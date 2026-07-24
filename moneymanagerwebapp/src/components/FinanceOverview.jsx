@@ -1,18 +1,19 @@
 import CustomPieChart from "./CustomPieChart.jsx";
 import {formatCurrency} from "../util/util.js";
 
-const FinanceOverview = ({totalBalance, totalIncome, totalExpense}) => {
-    const COLORS = ["#59168B", "#a0090e", "#016630"];
+const FinanceOverview = ({totalBalance = 0, totalIncome = 0, totalExpense = 0}) => {
+    // Green for Total Income, Red for Total Expenses
+    const COLORS = ["#016630", "#a0090e"];
 
     const balanceData = [
-        { name: "Total Balance", amount: totalBalance },
-        { name: "Total Expenses", amount: totalExpense },
         { name: "Total Income", amount: totalIncome },
+        { name: "Total Expenses", amount: totalExpense },
     ];
+
     return (
         <div className="card">
             <div className="flex items-center justify-between">
-                <h5 className="text-lg">Financial Overview</h5>
+                <h5 className="text-lg font-semibold">Financial Overview</h5>
             </div>
 
             <CustomPieChart
@@ -23,7 +24,7 @@ const FinanceOverview = ({totalBalance, totalIncome, totalExpense}) => {
                 showTextAnchor
             />
         </div>
-    )
-}
+    );
+};
 
 export default FinanceOverview;

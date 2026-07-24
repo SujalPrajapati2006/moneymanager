@@ -36,21 +36,22 @@ const CustomPieChart = ({ data, label, totalAmount, showTextAnchor, colors }) =>
                         <text
                             x="50%"
                             y="50%"
-                            dy={-25}
+                            dy={-15}
                             textAnchor="middle"
-                            fill="#666"
-                            fontSize="14px"
+                            fill="#64748b"
+                            fontSize="13px"
+                            fontWeight="500"
                         >
                             {label}
                         </text>
                         <text
                             x="50%"
                             y="50%"
-                            dy={8}
+                            dy={16}
                             textAnchor="middle"
-                            fill="#333"
-                            fontSize="24px"
-                            fontWeight="semi-bold"
+                            fill="#0f172a"
+                            fontSize="22px"
+                            fontWeight="700"
                         >
                             {totalAmount}
                         </text>
