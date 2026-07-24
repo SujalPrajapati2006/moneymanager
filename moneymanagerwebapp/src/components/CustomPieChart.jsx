@@ -9,10 +9,10 @@ import {
 import CustomTooltip from "./CustomTooltip.jsx";
 import CustomLegend from "./CustomLegend.jsx";
 
-const CustomPieChart = ({ data, label, totalAmount, showTextAnchor, colors }) => {
+const CustomPieChart = ({ data, label, totalAmount, showTextAnchor, colors, hideLegend = false }) => {
 
     return (
-        <ResponsiveContainer width="100%" height={380}>
+        <ResponsiveContainer width="100%" height={320}>
             <PieChart>
                 <Pie
                     data={data}
@@ -20,8 +20,8 @@ const CustomPieChart = ({ data, label, totalAmount, showTextAnchor, colors }) =>
                     nameKey="name"
                     cx="50%"
                     cy="50%"
-                    outerRadius={130}
-                    innerRadius={100}
+                    outerRadius={110}
+                    innerRadius={80}
                     labelLine={false}
                 >
                     {data.map((entry, index) => (
@@ -29,7 +29,7 @@ const CustomPieChart = ({ data, label, totalAmount, showTextAnchor, colors }) =>
                     ))}
                 </Pie>
                 <Tooltip content={<CustomTooltip />} />
-                <Legend content={<CustomLegend />} />
+                {!hideLegend && <Legend content={<CustomLegend />} />}
 
                 {showTextAnchor && (
                     <>

@@ -9,7 +9,6 @@ import {API_ENDPOINTS} from "../util/apiEndpoints.js";
 import toast from "react-hot-toast";
 import RecentTransactions from "../components/RecentTransactions.jsx";
 import FinanceOverview from "../components/FinanceOverview.jsx";
-import Transactions from "../components/Transactions.jsx";
 
 const Home = () => {
     useUser();
@@ -44,9 +43,9 @@ const Home = () => {
     return (
         <div>
             <Dashboard activeMenu="Dashboard">
-                <div className="my-5 mx-auto">
+                <div className="my-5 mx-auto space-y-6">
+                    {/* Top Summary Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {/* Display the cards*/}
                         <InfoCard
                             icon={<WalletCards />}
                             label="Total Balance"
@@ -66,40 +65,26 @@ const Home = () => {
                             color="bg-red-800"
                         />
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                        {/* Recent transactions */}
-                        <RecentTransactions
-                            transactions={dashboardData?.recentTransactions}
-                            onMore={() => navigate("/expense")}
-                        />
 
-                        {/* finance overview chart */}
+                    {/* Coherent Main Dashboard Section */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {/* Financial Overview Donut Chart */}
                         <FinanceOverview
                             totalBalance={dashboardData?.totalBalance || 0}
                             totalIncome={dashboardData?.totalIncome || 0}
                             totalExpense={dashboardData?.totalExpense || 0}
                         />
 
-                        {/* Expense transactions */}
-                        <Transactions
-                            transactions={dashboardData?.recent5Expenses || []}
+                        {/* Unified Recent Transactions Feed (max 5 items) */}
+                        <RecentTransactions
+                            transactions={dashboardData?.recentTransactions}
                             onMore={() => navigate("/expense")}
-                            type="expense"
-                            title="Recent Expenses"
-                        />
-
-                        {/* Income transactions */}
-                        <Transactions
-                            transactions={dashboardData?.recent5Incomes || []}
-                            onMore={() => navigate("/income")}
-                            type="income"
-                            title="Recent Incomes"
                         />
                     </div>
                 </div>
             </Dashboard>
         </div>
-    )
-}
+    );
+};
 
 export default Home;
