@@ -1,69 +1,91 @@
-# 💰 Money Manager - Full-Stack Financial Management Platform
+# 💰 Money Manager - Full-Stack Personal Finance Platform
 
 [![AWS Amplify](https://img.shields.io/badge/AWS_Amplify-Frontend_Live-FF9900?style=for-the-badge&logo=awsamplify&logoColor=white)](https://main.d3uek5tbugoad1.amplifyapp.com)
-[![AWS EC2](https://img.shields.io/badge/AWS_EC2-Backend_Docker-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white)](http://13.53.46.222/api/v1.0/health)
-[![AWS RDS](https://img.shields.io/badge/AWS_RDS-PostgreSQL_16-527FFF?style=for-the-badge&logo=amazonrds&logoColor=white)](https://aws.amazon.com/rds/)
-[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.4.x-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![AWS EC2](https://img.shields.io/badge/AWS_EC2-Backend_Docker-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white)](https://sujal-moneymanager.duckdns.org/api/v1.0/health)
+[![AWS RDS](https://img.shields.io/badge/AWS_RDS-PostgreSQL_17-527FFF?style=for-the-badge&logo=amazonrds&logoColor=white)](https://aws.amazon.com/rds/)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0.3-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![React](https://img.shields.io/badge/React-18.x_%2B_Vite-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
+[![Flyway](https://img.shields.io/badge/Flyway-Migration_11-CC0200?style=for-the-badge&logo=flyway&logoColor=white)](https://flywaydb.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
-> A enterprise-grade, production-ready **Personal Finance & Expense Management Platform** built with **Java 21, Spring Boot 3, React 18 (Vite), and PostgreSQL**, fully containerized with **Docker** and deployed on **Amazon Web Services (AWS)** architecture (Amplify, EC2, RDS) and **Vercel / Render**.
+> An enterprise-grade, production-ready **Personal Finance & Expense Management Platform** built with **Java 21, Spring Boot 4, React 18 (Vite), and PostgreSQL**, containerized with **Docker** and deployed on **Amazon Web Services (AWS)** architecture (AWS Amplify, AWS EC2, AWS RDS PostgreSQL).
 
 ---
 
-## 👨‍💻 Developer & Contact Details (For Recruiters)
+## 👨‍💻 Developer & Contact Details
 
-I am actively looking for **Software Engineering / Full-Stack / Backend Developer** roles! If you are a recruiter or hiring manager interested in my work, please feel free to connect or reach out directly:
+I am actively looking for **Software Engineering / Full-Stack / Backend Developer** opportunities! Feel free to reach out directly:
 
 - 👤 **Developer Name**: Sujal Prajapati
 - 📧 **Email**: [prajapatisujal1234@gmail.com](mailto:prajapatisujal1234@gmail.com)
-- 🐙 **GitHub Profile**: [github.com/SujalPrajapati2006](https://github.com/SujalPrajapati2006)
-- 🌐 **Primary AWS Live App**: [https://main.d3uek5tbugoad1.amplifyapp.com](https://main.d3uek5tbugoad1.amplifyapp.com)
-- ⚡ **Secondary Vercel App**: [https://moneymanager-cyan.vercel.app](https://moneymanager-cyan.vercel.app)
+- 🐙 **GitHub**: [github.com/SujalPrajapati2006](https://github.com/SujalPrajapati2006)
+- 🌐 **AWS Live Platform**: [https://main.d3uek5tbugoad1.amplifyapp.com](https://main.d3uek5tbugoad1.amplifyapp.com)
 
 ---
 
-## 🌐 Live Deployments & Cloud Architecture
+## 🌐 AWS Live Deployments & Cloud Architecture
 
-| Tier | Cloud Infrastructure | Service | Live URL / Status |
+| Tier | Cloud Infrastructure | Service Stack | Live URL / Health Endpoint |
 | :--- | :--- | :--- | :--- |
-| **Frontend (Primary)** | **AWS Amplify** | React + Vite SPA | [https://main.d3uek5tbugoad1.amplifyapp.com](https://main.d3uek5tbugoad1.amplifyapp.com) |
-| **Backend (Primary)** | **AWS EC2 (Ubuntu)** | Spring Boot 3 in Docker | [http://13.53.46.222/api/v1.0/health](http://13.53.46.222/api/v1.0/health) |
-| **Database (Primary)** | **AWS RDS** | Managed PostgreSQL 16 | `moneymanager-db.cfgq82gue3k6.eu-north-1.rds.amazonaws.com` |
-| **Frontend (Secondary)** | **Vercel** | React 18 SPA | [https://moneymanager-cyan.vercel.app](https://moneymanager-cyan.vercel.app) |
-| **Backend (Secondary)** | **Render** | Docker Container | [https://moneymanager-eysi.onrender.com/api/v1.0](https://moneymanager-eysi.onrender.com/api/v1.0) |
+| **Frontend** | **AWS Amplify** | React 18 + Vite SPA | [https://main.d3uek5tbugoad1.amplifyapp.com](https://main.d3uek5tbugoad1.amplifyapp.com) |
+| **Backend** | **AWS EC2 (Ubuntu)** | Spring Boot in Docker + Nginx SSL | [https://sujal-moneymanager.duckdns.org/api/v1.0](https://sujal-moneymanager.duckdns.org/api/v1.0) |
+| **Database** | **AWS RDS** | Managed PostgreSQL 17 | `moneymanager-db.cfgq82gue3k6.eu-north-1.rds.amazonaws.com` |
 
 ---
 
-## ✨ Key Features & Engineering Highlights
+## ✨ Key Features & Technical Highlights
 
-- **🔐 Robust Security & Auth**: Stateless JWT (JSON Web Token) authentication with Spring Security 6, BCrypt password hashing, and custom Security Filters (`JwtRequestFilter`).
-- **📊 Real-Time Financial Dashboard**: Dynamic income vs. expense analytics, monthly trend visualizers, and interactive charts powered by **Recharts**.
-- **💸 Transaction Lifecycle Management**: Full CRUD operations for income streams, daily expenses, and custom financial categories with emoji icon support.
-- **📄 Automated Excel Reports**: Server-side `.xlsx` report generation using **Apache POI**, downloadable directly or dispatched to user inbox via **Brevo SMTP Email Service**.
-- **🖼️ Profile & Cloud Avatar Integration**: User profile management with seamless avatar image uploads integrated via **Cloudinary API**.
-- **🔍 Granular Transaction Filtering**: Advanced filtering by custom date ranges, financial categories, and transaction types.
-- **⚡ Production Cloud Architecture**: Containerized with Docker and deployed using AWS Free Tier architecture (AWS EC2 + AWS RDS PostgreSQL + AWS Amplify).
+- 🏦 **Multi-Account Balance Tracking**:
+  - Separate balances for **Bank**, **Cash**, **Credit Card**, and **UPI / Digital Wallet** accounts instead of a single combined total.
+  - Dedicated Accounts UI (`/accounts`) for creating, editing, and deleting accounts.
+  - Smart transaction re-assignment: prompts users to reassign existing transactions to another account or delete associated entries permanently.
+  - Dashboard filter allowing users to toggle between *"All Accounts Combined"* and specific account metrics.
+
+- 📊 **Monthly Budget Management**:
+  - Set monthly spending caps per expense category (e.g. Food, Bills, Shopping).
+  - Dynamic visual progress bars with color-coded spending thresholds (Green <70%, Orange 70-100%, Red >100%).
+  - Dashboard Budget Overview widget featuring over-budget warning banners and closest limit alerts.
+
+- 🔄 **Automated Recurring Transactions**:
+  - Repeat recurring income and expense entries on **Weekly**, **Monthly**, or **Yearly** intervals with optional end dates.
+  - Automated Spring `@Scheduled` daily background job that checks due recurring items, auto-creates new transaction records, and advances `nextDueDate`.
+
+- 🛡️ **Custom Exception Infrastructure**:
+  - Centralized `@RestControllerAdvice` error handler catching domain-specific custom exceptions (`UnauthorizedException`, `ResourceNotFoundException`, `ResourceAlreadyExistsException`, `InvalidCredentialsException`, `EmailSendException`).
+  - Returns standardized, human-readable JSON error responses with appropriate HTTP status codes (401, 403, 404, 409, 500).
+
+- ⚙️ **Flyway Managed Database Schema**:
+  - Version-controlled SQL migration scripts (`V1_0__...` to `V20260726000200__...`) ensuring seamless database evolution without relying on Hibernate auto-ddl.
+
+- 🔐 **Stateless JWT Security**:
+  - Spring Security 6 authentication pipeline with BCrypt password encryption, custom Security Filters (`JwtRequestFilter`), and bearer token validation.
+
+- 📄 **Automated Excel Reports & Email Inbox Dispatch**:
+  - Server-side `.xlsx` financial report generation using **Apache POI**.
+  - Direct sheet downloads and background email dispatch to user inboxes via **Brevo SMTP**.
+
+- 🖼️ **Cloud Profile & Avatar Integration**:
+  - Cloud avatar image upload integration powered by **Cloudinary API**.
 
 ---
 
 ## 🛠️ Technology Stack
 
 ### Frontend Architecture
-- **Core Framework**: React 18 + Vite
+- **Framework**: React 18 + Vite
 - **Routing & State**: React Router DOM (v6), React Context API
 - **Data Visualization**: Recharts
-- **UI Components & Icons**: Lucide React, React Icons, Custom CSS3 Design System
-- **HTTP Client**: Axios with Interceptors & JWT Header Injection
-- **Deployment**: AWS Amplify & Vercel
+- **Icons & Styling**: Lucide React, React Icons, Vanilla CSS3 Design System (Glassmorphism + Dark/Light modes)
+- **HTTP Client**: Axios with interceptors for token injection & auto-refresh
+- **Deployment**: AWS Amplify
 
 ### Backend Architecture
-- **Language & Runtime**: Java 21, OpenJDK
-- **Framework**: Spring Boot 3.4.x (Web, Security, Data JPA, Validation, Mail)
-- **Security**: Spring Security + JWT Token Authentication
-- **Database & Persistence**: PostgreSQL 16, Spring Data JPA / Hibernate ORM, Flyway Migrations
+- **Language & Runtime**: Java 21 (OpenJDK)
+- **Framework**: Spring Boot 4.0.3 (Web, Security, Data JPA, Validation, Mail)
+- **Database & Migration**: PostgreSQL 17, Spring Data JPA / Hibernate ORM, Flyway 11
+- **Background Tasks**: Spring `@Scheduled` Daily Cron Jobs
 - **File & Email Processing**: Apache POI (`.xlsx`), JavaMailSender / Brevo SMTP
-- **Containerization & Hosting**: Docker, AWS EC2 (Ubuntu 24.04 LTS), AWS RDS
+- **Containerization & Hosting**: Docker, Nginx SSL, AWS EC2 (Ubuntu 24.04 LTS), AWS RDS PostgreSQL
 
 ---
 
@@ -79,39 +101,48 @@ sequenceDiagram
     participant Brevo as Brevo SMTP / Cloudinary
 
     User->>Amplify: Navigate to Website
-    Amplify-->>User: Render React Dashboard
+    Amplify-->>User: Render React Financial App
     User->>Amplify: Login / Register Request
     Amplify->>EC2: POST /api/v1.0/login
-    EC2->>RDS: Verify Profile Credentials (BCrypt)
-    RDS-->>EC2: Profile Record
+    EC2->>RDS: Verify Credentials (BCrypt)
+    RDS-->>EC2: User Profile Record
     EC2-->>Amplify: Return Signed JWT Token
-    User->>Amplify: Export Financial Statement
-    Amplify->>EC2: POST /api/v1.0/email/income-excel (Bearer Token)
-    EC2->>EC2: Generate .xlsx Sheet (Apache POI)
-    EC2->>Brevo: Dispatch Email with Excel Attachment
-    Brevo-->>User: Deliver Financial Report to Inbox
+    User->>Amplify: Add Transaction / Select Account
+    Amplify->>EC2: POST /api/v1.0/expenses (Bearer Token)
+    EC2->>RDS: Save Entry & Update Account Balance
+    RDS-->>EC2: Confirmation
+    EC2-->>Amplify: Updated Financial Summary
+    User->>Amplify: Export Monthly Excel Statement
+    Amplify->>EC2: POST /api/v1.0/email/expense-excel
+    EC2->>EC2: Build .xlsx Sheet (Apache POI)
+    EC2->>Brevo: Send Mail with Attachment
+    Brevo-->>User: Deliver Statement to Inbox
 ```
 
 ---
 
 ## 🔌 Core API Endpoints
 
-| Method | Endpoint | Description | Auth Required |
+| Method | Endpoint | Description | Auth |
 | :--- | :--- | :--- | :---: |
-| `POST` | `/api/v1.0/register` | Register new user account | ❌ |
-| `POST` | `/api/v1.0/login` | Authenticate & issue JWT token | ❌ |
-| `GET` | `/api/v1.0/profile` | Get authenticated user profile | ✅ |
-| `GET` | `/api/v1.0/dashboard` | Fetch financial summary analytics | ✅ |
-| `GET`/`POST` | `/api/v1.0/incomes` | List all incomes / Add income entry | ✅ |
+| `POST` | `/api/v1.0/register` | Register new user profile | ❌ |
+| `POST` | `/api/v1.0/login` | Authenticate user & issue JWT token | ❌ |
+| `GET` | `/api/v1.0/profile` | Fetch active user profile | ✅ |
+| `GET` | `/api/v1.0/dashboard` | Fetch dashboard analytics (optional `?accountId=`) | ✅ |
+| `GET`/`POST` | `/api/v1.0/accounts` | Fetch user accounts / Create new account | ✅ |
+| `PUT`/`DELETE` | `/api/v1.0/accounts/{id}` | Update account / Delete account (with re-assignment) | ✅ |
+| `GET`/`POST` | `/api/v1.0/budgets` | Fetch monthly budgets / Save category budget | ✅ |
+| `DELETE` | `/api/v1.0/budgets/{id}` | Delete category budget | ✅ |
+| `GET`/`POST` | `/api/v1.0/incomes` | List incomes / Add new income entry | ✅ |
 | `DELETE` | `/api/v1.0/incomes/{id}` | Delete income entry by ID | ✅ |
-| `GET`/`POST` | `/api/v1.0/expenses` | List all expenses / Add expense entry | ✅ |
+| `GET`/`POST` | `/api/v1.0/expenses` | List expenses / Add new expense entry | ✅ |
 | `DELETE` | `/api/v1.0/expenses/{id}` | Delete expense entry by ID | ✅ |
 | `GET`/`POST` | `/api/v1.0/categories` | Manage custom financial categories | ✅ |
-| `POST` | `/api/v1.0/filter` | Filter transactions by date/category | ✅ |
+| `POST` | `/api/v1.0/filter` | Search & filter transactions by date, category, account | ✅ |
 | `GET` | `/api/v1.0/excel/download/income` | Download Income Excel Sheet (`.xlsx`) | ✅ |
 | `GET` | `/api/v1.0/excel/download/expense` | Download Expense Excel Sheet (`.xlsx`) | ✅ |
-| `POST` | `/api/v1.0/email/income-excel` | Dispatch Income Excel Report to Email | ✅ |
-| `POST` | `/api/v1.0/email/expense-excel` | Dispatch Expense Excel Report to Email | ✅ |
+| `POST` | `/api/v1.0/email/income-excel` | Send Income Excel Report to Email Inbox | ✅ |
+| `POST` | `/api/v1.0/email/expense-excel` | Send Expense Excel Report to Email Inbox | ✅ |
 
 ---
 
@@ -122,7 +153,6 @@ sequenceDiagram
 - **Java JDK**: `21+`
 - **Maven**: `3.9+`
 - **PostgreSQL**: `v15+`
-- **Docker**: *(Optional, for containerized run)*
 
 ### 1. Clone Repository
 ```bash
@@ -134,17 +164,16 @@ cd moneymanager
 ```bash
 cd money-manager
 ```
-Create a `.env` or set environment variables:
-```env
-SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/postgres
-SPRING_DATASOURCE_USERNAME=postgres
-SPRING_DATASOURCE_PASSWORD=your_password
-BREVO_USERNAME=your_brevo_username
-BREVO_PASSWORD=your_brevo_password
-BREVO_FROM_EMAIL=your_email@domain.com
-MONEY_MANAGER_FRONTEND_URL=http://localhost:5173
+Set environment variables or create `src/main/resources/application.properties`:
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
+spring.datasource.username=postgres
+spring.datasource.password=your_password
+spring.flyway.enabled=true
+spring.mail.properties.mail.smtp.from=your_email@domain.com
+jwt.secret=your_jwt_secret_key_min_32_characters_long
 ```
-Run application:
+Compile and run Spring Boot application:
 ```bash
 ./mvnw spring-boot:run
 ```
@@ -162,13 +191,13 @@ Run development server:
 ```bash
 npm run dev
 ```
-Open [http://localhost:5173](http://localhost:5173) in browser!
+Open [http://localhost:5173](http://localhost:5173) in your browser!
 
 ---
 
 ## 📬 Get in Touch / Hire Me
 
-If you're looking for a passionate developer who builds scalable, high-performance web applications using modern tech stacks, I'd love to talk!
+If you're looking for a dedicated software developer who builds clean, scalable, high-performance web applications, I'd love to connect!
 
 - **Email**: [prajapatisujal1234@gmail.com](mailto:prajapatisujal1234@gmail.com)
 - **GitHub**: [SujalPrajapati2006](https://github.com/SujalPrajapati2006)
