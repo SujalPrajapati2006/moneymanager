@@ -24,7 +24,7 @@ public class BudgetEntity {
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryEntity category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "profile_id", nullable = false)
     private ProfileEntity profile;
 
