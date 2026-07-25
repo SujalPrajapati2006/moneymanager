@@ -24,5 +24,9 @@ export const API_ENDPOINTS = {
     GET_BUDGETS: (month) => month ? `/budgets?month=${month}` : "/budgets",
     SAVE_BUDGET: "/budgets",
     DELETE_BUDGET: (budgetId) => `/budgets/${budgetId}`,
+    GET_ACCOUNTS: "/accounts",
+    ADD_ACCOUNT: "/accounts",
+    UPDATE_ACCOUNT: (accountId) => `/accounts/${accountId}`,
+    DELETE_ACCOUNT: (accountId, reassignId) => reassignId ? `/accounts/${accountId}?reassignAccountId=${reassignId}` : `/accounts/${accountId}`,
     UPLOAD_IMAGE: `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`
 };

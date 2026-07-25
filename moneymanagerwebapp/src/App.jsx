@@ -3,6 +3,7 @@ import Home from "./pages/Home.jsx";
 import Income from "./pages/Income.jsx";
 import Expense from "./pages/Expense.jsx";
 import Category from "./pages/Category.jsx";
+import Accounts from "./pages/Accounts.jsx";
 import Filter from "./pages/Filter.jsx";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
@@ -20,6 +21,7 @@ const App = () => {
                     <Route path="/" element={<Root />} />
                     <Route path="/home" element={<LandingPage />} />
                     <Route path="/dashboard" element={<Home />} />
+                    <Route path="/accounts" element={<Accounts />} />
                     <Route path="/income" element={<Income />} />
                     <Route path="/expense" element={<Expense />} />
                     <Route path="/category" element={<Category />} />

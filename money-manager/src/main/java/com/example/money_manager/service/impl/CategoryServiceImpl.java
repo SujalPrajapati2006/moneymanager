@@ -3,6 +3,8 @@ package com.example.money_manager.service.impl;
 import com.example.money_manager.dto.request.CategoryDTO;
 import com.example.money_manager.entity.CategoryEntity;
 import com.example.money_manager.entity.ProfileEntity;
+import com.example.money_manager.exception.ResourceAlreadyExistsException;
+import com.example.money_manager.exception.ResourceNotFoundException;
 import com.example.money_manager.repository.CategoryRepository;
 import com.example.money_manager.service.CategoryService;
 import com.example.money_manager.service.ProfileService;
@@ -21,7 +23,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDTO saveCategory(CategoryDTO categoryDTO) {
         ProfileEntity profile = profileService.getCurrentProfile();
         if (categoryRepository.existsByNameAndProfileId(categoryDTO.getName(), profile.getId())) {
-            throw new RuntimeException("Category with this name already exists");
+            throw new ResourceAlreadyExistsException("Category with this name already exists");
         }
 
         CategoryEntity newCategory = toEntity(categoryDTO, profile);
@@ -46,7 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDTO updateCategory(Long categoryId, CategoryDTO dto) {
         ProfileEntity profile = profileService.getCurrentProfile();
         CategoryEntity existingCategory = categoryRepository.findByIdAndProfileId(categoryId, profile.getId())
-                .orElseThrow(() -> new RuntimeException("Category not found or not accessible"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found or not accessible"));
         existingCategory.setName(dto.getName());
         existingCategory.setIcon(dto.getIcon());
         existingCategory = categoryRepository.save(existingCategory);

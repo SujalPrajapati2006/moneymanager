@@ -1,11 +1,15 @@
 package com.example.money_manager.service.impl;
 
 import com.example.money_manager.dto.request.ExpenseDTO;
+import com.example.money_manager.entity.AccountEntity;
 import com.example.money_manager.entity.CategoryEntity;
 import com.example.money_manager.entity.ExpenseEntity;
 import com.example.money_manager.entity.ProfileEntity;
+import com.example.money_manager.exception.ResourceNotFoundException;
+import com.example.money_manager.exception.UnauthorizedException;
 import com.example.money_manager.repository.CategoryRepository;
 import com.example.money_manager.repository.ExpenseRepository;
+import com.example.money_manager.service.AccountService;
 import com.example.money_manager.service.ExpenseService;
 import com.example.money_manager.service.ProfileService;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +30,14 @@ public class ExpenseServiceImpl implements ExpenseService {
     private final CategoryRepository categoryRepository;
     private final ExpenseRepository expenseRepository;
     private final ProfileService profileService;
+    private final AccountService accountService;
 
     // Adds a new expense to the database
     @Transactional
     public ExpenseDTO addExpense(ExpenseDTO dto) {
         ProfileEntity profile = profileService.getCurrentProfile();
         CategoryEntity category = categoryRepository.findById(dto.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
         ExpenseEntity newExpense = toEntity(dto, profile, category);
         newExpense = expenseRepository.save(newExpense);
         return toDTO(newExpense);
@@ -53,9 +58,9 @@ public class ExpenseServiceImpl implements ExpenseService {
     public void deleteExpense(Long expenseId) {
         ProfileEntity profile = profileService.getCurrentProfile();
         ExpenseEntity entity = expenseRepository.findById(expenseId)
-                .orElseThrow(() -> new RuntimeException("Expense not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Expense not found"));
         if (!entity.getProfile().getId().equals(profile.getId())) {
-            throw new RuntimeException("Unauthorized to delete this expense");
+            throw new UnauthorizedException("Unauthorized to delete this expense");
         }
         expenseRepository.delete(entity);
     }
@@ -93,6 +98,8 @@ public class ExpenseServiceImpl implements ExpenseService {
         LocalDate txDate = dto.getDate() != null ? dto.getDate() : LocalDate.now();
         LocalDate nextDue = isRecurring ? (dto.getNextDueDate() != null ? dto.getNextDueDate() : calculateNextDueDate(txDate, dto.getRecurrenceFrequency())) : null;
 
+        AccountEntity account = accountService.getAccountEntityForCurrentUser(dto.getAccountId());
+
         return ExpenseEntity.builder()
                 .name(dto.getName())
                 .icon(dto.getIcon())
@@ -104,6 +111,7 @@ public class ExpenseServiceImpl implements ExpenseService {
                 .recurrenceEndDate(isRecurring ? dto.getRecurrenceEndDate() : null)
                 .profile(profile)
                 .category(category)
+                .account(account)
                 .build();
     }
 
@@ -124,6 +132,8 @@ public class ExpenseServiceImpl implements ExpenseService {
                 .icon(entity.getIcon())
                 .categoryId(entity.getCategory() != null ? entity.getCategory().getId(): null)
                 .categoryName(entity.getCategory() != null ? entity.getCategory().getName(): "N/A")
+                .accountId(entity.getAccount() != null ? entity.getAccount().getId() : null)
+                .accountName(entity.getAccount() != null ? entity.getAccount().getName() : "Cash")
                 .amount(entity.getAmount())
                 .date(entity.getDate())
                 .isRecurring(entity.getIsRecurring())

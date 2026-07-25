@@ -5,6 +5,7 @@ import com.example.money_manager.dto.request.ProfileDTO;
 import com.example.money_manager.dto.request.RegisterRequest;
 import com.example.money_manager.dto.response.RegisterResponse;
 import com.example.money_manager.entity.ProfileEntity;
+import com.example.money_manager.exception.InvalidCredentialsException;
 import com.example.money_manager.exception.ResourceAlreadyExistsException;
 import com.example.money_manager.repository.ProfileRepository;
 import com.example.money_manager.service.EmailService;
@@ -123,7 +124,7 @@ public class ProfileServiceImpl implements ProfileService {
                     "token", token,
                     "user", getPublicProfile(authDTO.getEmail()));
         } catch (Exception e) {
-            throw new RuntimeException("Invalid email or password");
+            throw new InvalidCredentialsException("Invalid email or password");
         }
     }
 }

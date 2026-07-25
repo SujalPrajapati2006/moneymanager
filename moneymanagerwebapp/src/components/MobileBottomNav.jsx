@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { LayoutDashboard, ArrowUpCircle, ArrowDownCircle, Layers, Filter } from "lucide-react";
+import { LayoutDashboard, ArrowUpCircle, ArrowDownCircle, Layers, Filter, Building2 } from "lucide-react";
 
 const NAV_ITEMS = [
     { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
+    { label: "Accounts", path: "/accounts", icon: Building2 },
     { label: "Income", path: "/income", icon: ArrowUpCircle },
     { label: "Expense", path: "/expense", icon: ArrowDownCircle },
     { label: "Category", path: "/category", icon: Layers },
