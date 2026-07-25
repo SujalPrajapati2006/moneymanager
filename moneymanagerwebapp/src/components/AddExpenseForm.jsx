@@ -3,30 +3,49 @@ import EmojiPickerPopup from "./EmojiPickerPopup.jsx";
 import Input from "./Input.jsx";
 import { Plus } from "lucide-react";
 import Button from "./Button.jsx";
+import axiosConfig from "../util/axiosConfig.jsx";
+import { API_ENDPOINTS } from "../util/apiEndpoints.js";
 
 // Add 'categories' prop
 const AddExpenseForm = ({ onAddExpense, categories }) => {
-    const [expense, setExpense] = useState({ // Renamed 'income' state to 'expense' for clarity
+    const [expense, setExpense] = useState({
         name: "",
-        categoryId: "", // Changed from 'category' to 'categoryId'
+        categoryId: "",
+        accountId: "",
         amount: "",
         date: "",
-        icon: "", // Icon might be associated with the selected category, or kept separate for custom entries
+        icon: "",
         isRecurring: false,
         recurrenceFrequency: "monthly",
         recurrenceEndDate: "",
     });
+    const [accounts, setAccounts] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const fetchAccounts = async () => {
+            try {
+                const res = await axiosConfig.get(API_ENDPOINTS.GET_ACCOUNTS);
+                const fetched = res.data || [];
+                setAccounts(fetched);
+                if (fetched.length > 0 && !expense.accountId) {
+                    setExpense((prev) => ({ ...prev, accountId: fetched[0].id }));
+                }
+            } catch (err) {
+                console.error("Error loading accounts:", err);
+            }
+        };
+        fetchAccounts();
+    }, []);
 
     // Effect to set a default category if categories are loaded and none is selected
     useEffect(() => {
         if (categories && categories.length > 0 && !expense.categoryId) {
-            // Automatically select the first category as default if none is chosen
-            setExpense((prev) => ({ ...prev, categoryId: categories[0].id })); // Use categories[0].id for MySQL
+            setExpense((prev) => ({ ...prev, categoryId: categories[0].id }));
         }
     }, [categories, expense.categoryId]);
 
-    const handleChange = (key, value) => setExpense({ ...expense, [key]: value }); // Changed setIncome to setExpense
+    const handleChange = (key, value) => setExpense({ ...expense, [key]: value });
 
     const handleAddExpense = async () => {
         setLoading(true);
@@ -37,16 +56,20 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
         }
     };
 
-    // Map categories to the format expected by the reusable Input dropdown
     const categoryOptions = categories.map((cat) => ({
-        value: cat.id, // Correct for MySQL 'id'
-        label: `${cat.name}`, // Display icon and name in dropdown
+        value: cat.id,
+        label: `${cat.name}`,
+    }));
+
+    const accountOptions = accounts.map((acc) => ({
+        value: acc.id,
+        label: `${acc.name} (${acc.type.replace("_", " ")})`,
     }));
 
     return (
         <div>
             <EmojiPickerPopup
-                icon={expense.icon} // Uses expense.icon now
+                icon={expense.icon}
                 onSelect={(selectedIcon) => handleChange("icon", selectedIcon)}
             />
 
@@ -58,14 +81,22 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
                 type="text"
             />
 
-            {/* Replaced Input for 'Category' text with a dropdown for 'Category' */}
-            <Input
-                label="Category"
-                value={expense.categoryId}
-                onChange={({ target }) => handleChange("categoryId", target.value)}
-                isSelect={true}
-                options={categoryOptions}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input
+                    label="Category"
+                    value={expense.categoryId}
+                    onChange={({ target }) => handleChange("categoryId", target.value)}
+                    isSelect={true}
+                    options={categoryOptions}
+                />
+                <Input
+                    label="Account"
+                    value={expense.accountId}
+                    onChange={({ target }) => handleChange("accountId", target.value)}
+                    isSelect={true}
+                    options={accountOptions}
+                />
+            </div>
 
             <Input
                 value={expense.amount}

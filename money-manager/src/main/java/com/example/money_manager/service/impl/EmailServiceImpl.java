@@ -1,5 +1,6 @@
 package com.example.money_manager.service.impl;
 
+import com.example.money_manager.exception.EmailSendException;
 import com.example.money_manager.service.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -31,7 +32,7 @@ public class EmailServiceImpl implements EmailService {
 
             mailSender.send(message);
         } catch (Exception e) {
-            throw new RuntimeException("Email sending failed", e);
+            throw new EmailSendException("Email sending failed", e);
         }
     }
 

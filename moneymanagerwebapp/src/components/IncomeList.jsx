@@ -78,6 +78,7 @@ const IncomeList = ({transactions, onDelete, onDownload, onEmail, onAddIncome}) 
                         date={moment(income.date).format('Do MMM YYYY')}
                         amount={income.amount}
                         type="income"
+                        accountName={income.accountName}
                         isRecurring={income.isRecurring}
                         recurrenceFrequency={income.recurrenceFrequency}
                         onDelete={() => onDelete(income.id)}

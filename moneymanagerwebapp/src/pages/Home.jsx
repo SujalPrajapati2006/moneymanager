@@ -17,15 +17,29 @@ const Home = () => {
 
     const navigate = useNavigate();
     const [dashboardData, setDashboardData] = useState(null);
+    const [accounts, setAccounts] = useState([]);
+    const [selectedAccountId, setSelectedAccountId] = useState("all");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const fetchDashboardData = async () => {
+    const fetchAccounts = async () => {
+        try {
+            const res = await axiosConfig.get(API_ENDPOINTS.GET_ACCOUNTS);
+            setAccounts(res.data || []);
+        } catch (err) {
+            console.error("Error fetching accounts:", err);
+        }
+    };
+
+    const fetchDashboardData = async (accountId = selectedAccountId) => {
         setLoading(true);
         setError(null);
 
         try {
-            const response = await axiosConfig.get(API_ENDPOINTS.DASHBOARD_DATA);
+            const url = accountId && accountId !== "all"
+                ? `${API_ENDPOINTS.DASHBOARD_DATA}?accountId=${accountId}`
+                : API_ENDPOINTS.DASHBOARD_DATA;
+            const response = await axiosConfig.get(url);
             if (response.status === 200) {
                 setDashboardData(response.data);
             }
@@ -39,13 +53,43 @@ const Home = () => {
     };
 
     useEffect(() => {
-        fetchDashboardData();
+        fetchAccounts();
+        fetchDashboardData("all");
     }, []);
+
+    const handleAccountChange = (e) => {
+        const value = e.target.value;
+        setSelectedAccountId(value);
+        fetchDashboardData(value);
+    };
 
     return (
         <div>
             <Dashboard activeMenu="Dashboard">
                 <div className="my-5 mx-auto space-y-6">
+                    {/* Header & Account Selector */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                        <div>
+                            <h2 className="text-xl font-bold text-gray-900">Dashboard Overview</h2>
+                            <p className="text-xs text-gray-500 mt-0.5">Summary of your financial activity</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <label className="text-xs font-semibold text-gray-600">Account:</label>
+                            <select
+                                value={selectedAccountId}
+                                onChange={handleAccountChange}
+                                className="text-xs font-medium border border-gray-200 rounded-xl px-3 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer"
+                            >
+                                <option value="all">All Accounts Combined</option>
+                                {accounts.map((acc) => (
+                                    <option key={acc.id} value={acc.id}>
+                                        {acc.name} ({acc.type.replace("_", " ")})
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+
                     {loading && <LoadingState message="Fetching your financial overview..." />}
 
                     {error && !loading && (

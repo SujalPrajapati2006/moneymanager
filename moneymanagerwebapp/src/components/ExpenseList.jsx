@@ -39,6 +39,7 @@ const ExpenseList = ({ transactions, onDelete, onDownload, onEmail, onAddExpense
                         date={moment(expense.date).format("Do MMM YYYY")}
                         amount={expense.amount}
                         type="expense"
+                        accountName={expense.accountName}
                         isRecurring={expense.isRecurring}
                         recurrenceFrequency={expense.recurrenceFrequency}
                         onDelete={() => onDelete(expense.id)}

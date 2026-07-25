@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -17,8 +18,10 @@ public class DashboardController {
     private final DashboardService dashboardService;
 
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getDashboardData() {
-        Map<String, Object> dashboardData = dashboardService.getDashboardData();
+    public ResponseEntity<Map<String, Object>> getDashboardData(
+            @RequestParam(required = false) Long accountId
+    ) {
+        Map<String, Object> dashboardData = dashboardService.getDashboardData(accountId);
         return ResponseEntity.ok(dashboardData);
     }
 }

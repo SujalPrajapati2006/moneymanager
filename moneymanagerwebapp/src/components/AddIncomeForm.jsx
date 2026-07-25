@@ -3,6 +3,8 @@ import EmojiPickerPopup from "./EmojiPickerPopup.jsx";
 import Input from "./Input.jsx";
 import {Plus} from "lucide-react";
 import Button from "./Button.jsx";
+import axiosConfig from "../util/axiosConfig.jsx";
+import { API_ENDPOINTS } from "../util/apiEndpoints.js";
 
 const AddIncomeForm = ({onAddIncome, categories}) => {
     const [income, setIncome] = useState({
@@ -11,16 +13,39 @@ const AddIncomeForm = ({onAddIncome, categories}) => {
         date: '',
         icon: '',
         categoryId: '',
+        accountId: '',
         isRecurring: false,
         recurrenceFrequency: 'monthly',
         recurrenceEndDate: ''
     })
+    const [accounts, setAccounts] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const fetchAccounts = async () => {
+            try {
+                const res = await axiosConfig.get(API_ENDPOINTS.GET_ACCOUNTS);
+                const fetched = res.data || [];
+                setAccounts(fetched);
+                if (fetched.length > 0 && !income.accountId) {
+                    setIncome((prev) => ({ ...prev, accountId: fetched[0].id }));
+                }
+            } catch (err) {
+                console.error("Error loading accounts:", err);
+            }
+        };
+        fetchAccounts();
+    }, []);
 
     const categoryOptions = categories.map(category => ({
         value: category.id,
         label: category.name
     }))
+
+    const accountOptions = accounts.map((acc) => ({
+        value: acc.id,
+        label: `${acc.name} (${acc.type.replace("_", " ")})`,
+    }));
 
     const handleChange = (key, value) => {
         setIncome({...income, [key]: value});
@@ -56,13 +81,22 @@ const AddIncomeForm = ({onAddIncome, categories}) => {
                 type="text"
             />
 
-            <Input
-                label="Category"
-                value={income.categoryId}
-                onChange={({target}) => handleChange('categoryId', target.value)}
-                isSelect={true}
-                options={categoryOptions}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input
+                    label="Category"
+                    value={income.categoryId}
+                    onChange={({target}) => handleChange('categoryId', target.value)}
+                    isSelect={true}
+                    options={categoryOptions}
+                />
+                <Input
+                    label="Account"
+                    value={income.accountId}
+                    onChange={({target}) => handleChange('accountId', target.value)}
+                    isSelect={true}
+                    options={accountOptions}
+                />
+            </div>
 
             <Input
                 value={income.amount}

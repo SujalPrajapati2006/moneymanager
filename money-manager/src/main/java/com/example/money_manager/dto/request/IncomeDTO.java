@@ -19,6 +19,8 @@ public class IncomeDTO {
     private String icon;
     private String categoryName;
     private Long categoryId;
+    private String accountName;
+    private Long accountId;
     private BigDecimal amount;
     private LocalDate date;
     private Boolean isRecurring;

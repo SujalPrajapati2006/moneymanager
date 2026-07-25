@@ -11,16 +11,17 @@ import com.example.money_manager.service.IncomeService;
 import com.example.money_manager.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import static java.util.stream.Stream.concat;
 
-import org.springframework.transaction.annotation.Transactional;
+import static java.util.stream.Stream.concat;
 
 @Service
 @RequiredArgsConstructor
@@ -31,12 +32,28 @@ public class DashboardServiceImpl implements DashboardService {
     private final ProfileService profileService;
     private final BudgetService budgetService;
 
+    @Override
     public Map<String, Object> getDashboardData() {
+        return getDashboardData(null);
+    }
+
+    @Override
+    public Map<String, Object> getDashboardData(Long accountId) {
         ProfileEntity profile = profileService.getCurrentProfile();
 
         Map<String, Object> returnValue = new LinkedHashMap<>();
         List<IncomeDTO> latestIncomes = incomeService.getLatest5IncomesForCurrentUser();
         List<ExpenseDTO> latestExpenses = expenseService.getLatest5ExpensesForCurrentUser();
+
+        if (accountId != null) {
+            latestIncomes = latestIncomes.stream()
+                    .filter(i -> accountId.equals(i.getAccountId()))
+                    .toList();
+            latestExpenses = latestExpenses.stream()
+                    .filter(e -> accountId.equals(e.getAccountId()))
+                    .toList();
+        }
+
         List<RecentTransactionDTO> recentTransactions = concat(latestIncomes.stream().map(income ->
                         RecentTransactionDTO.builder()
                                 .id(income.getId())
@@ -71,11 +88,17 @@ public class DashboardServiceImpl implements DashboardService {
 
         String currentMonth = YearMonth.now().format(DateTimeFormatter.ofPattern("yyyy-MM"));
 
-        returnValue.put("totalBalance",
-                incomeService.getTotalIncomeForCurrentUser()
-                        .subtract(expenseService.getTotalExpenseForCurrentUser()));
-        returnValue.put("totalIncome", incomeService.getTotalIncomeForCurrentUser());
-        returnValue.put("totalExpense", expenseService.getTotalExpenseForCurrentUser());
+        BigDecimal totalIncome = incomeService.getTotalIncomeForCurrentUser();
+        BigDecimal totalExpense = expenseService.getTotalExpenseForCurrentUser();
+
+        if (accountId != null) {
+            totalIncome = latestIncomes.stream().map(IncomeDTO::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+            totalExpense = latestExpenses.stream().map(ExpenseDTO::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        }
+
+        returnValue.put("totalBalance", totalIncome.subtract(totalExpense));
+        returnValue.put("totalIncome", totalIncome);
+        returnValue.put("totalExpense", totalExpense);
         returnValue.put("recent5Expenses", latestExpenses);
         returnValue.put("recent5Incomes", latestIncomes);
         returnValue.put("recentTransactions", recentTransactions);
@@ -83,4 +106,3 @@ public class DashboardServiceImpl implements DashboardService {
         return returnValue;
     }
 }
-
