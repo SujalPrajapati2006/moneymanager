@@ -9,6 +9,7 @@ import {API_ENDPOINTS} from "../util/apiEndpoints.js";
 import toast from "react-hot-toast";
 import RecentTransactions from "../components/RecentTransactions.jsx";
 import FinanceOverview from "../components/FinanceOverview.jsx";
+import BudgetOverviewWidget from "../components/BudgetOverviewWidget.jsx";
 import {LoadingState, ErrorState} from "../components/StateCard.jsx";
 
 const Home = () => {
@@ -77,6 +78,9 @@ const Home = () => {
                                     color="bg-red-800"
                                 />
                             </div>
+
+                            {/* Budget Overview Widget & Exceeded Warning Banner */}
+                            <BudgetOverviewWidget budgets={dashboardData?.budgets || []} />
 
                             {/* Main Dashboard Section */}
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

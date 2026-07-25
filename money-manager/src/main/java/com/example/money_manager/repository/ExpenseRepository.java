@@ -29,5 +29,13 @@ public interface ExpenseRepository extends JpaRepository<ExpenseEntity, Long> {
     List<ExpenseEntity> findByProfileIdAndDateBetween(Long profileId, LocalDate startDate, LocalDate endDate);
 
     List<ExpenseEntity> findByProfileIdAndDate(Long profileId, LocalDate date);
+
+    @Query("SELECT COALESCE(SUM(e.amount), 0) FROM ExpenseEntity e WHERE e.profile.id = :profileId AND e.category.id = :categoryId AND e.date BETWEEN :startDate AND :endDate")
+    BigDecimal findTotalExpenseByProfileIdAndCategoryIdAndDateBetween(
+            @Param("profileId") Long profileId,
+            @Param("categoryId") Long categoryId,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate
+    );
 }
 

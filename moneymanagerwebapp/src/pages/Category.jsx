@@ -8,6 +8,7 @@ import {API_ENDPOINTS} from "../util/apiEndpoints.js";
 import toast from "react-hot-toast";
 import Modal from "../components/Modal.jsx";
 import AddCategoryForm from "../components/AddCategoryForm.jsx";
+import SetBudgetModal from "../components/SetBudgetModal.jsx";
 import Button from "../components/Button.jsx";
 import {LoadingState, ErrorState} from "../components/StateCard.jsx";
 
@@ -16,25 +17,47 @@ const Category = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [categoryData, setCategoryData] = useState([]);
+    const [budgets, setBudgets] = useState([]);
     const [openAddCategoryModal, setOpenAddCategoryModal] = useState(false);
     const [openEditCategoryModal, setOpenEditCategoryModal] = useState(false);
+    const [openBudgetModal, setOpenBudgetModal] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedBudgetCategory, setSelectedBudgetCategory] = useState(null);
+    const [selectedCategoryBudget, setSelectedCategoryBudget] = useState(null);
 
     const fetchCategoryDetails = async () => {
         setLoading(true);
         setError(null);
 
         try {
-            const response = await axiosConfig.get(API_ENDPOINTS.GET_ALL_CATEGORIES);
-            if (response.status === 200) {
-                setCategoryData(response.data || []);
+            const [catRes, budgetRes] = await Promise.all([
+                axiosConfig.get(API_ENDPOINTS.GET_ALL_CATEGORIES),
+                axiosConfig.get(API_ENDPOINTS.GET_BUDGETS())
+            ]);
+
+            if (catRes.status === 200) {
+                setCategoryData(catRes.data || []);
+            }
+            if (budgetRes.status === 200) {
+                setBudgets(budgetRes.data || []);
             }
         }catch(err) {
-            console.error('Something went wrong while fetching categories:', err);
+            console.error('Something went wrong while fetching category data:', err);
             setError(err.response?.data?.message || "Couldn't load categories. Please try again.");
-            toast.error("Failed to load categories.");
+            toast.error("Failed to load category data.");
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchBudgets = async () => {
+        try {
+            const res = await axiosConfig.get(API_ENDPOINTS.GET_BUDGETS());
+            if (res.status === 200) {
+                setBudgets(res.data || []);
+            }
+        } catch (err) {
+            console.error("Failed to refresh budgets", err);
         }
     };
 
@@ -78,6 +101,39 @@ const Category = () => {
     const handleEditCategory = (categoryToEdit) => {
         setSelectedCategory(categoryToEdit);
         setOpenEditCategoryModal(true);
+    };
+
+    const handleOpenBudgetModal = (category, existingBudget) => {
+        setSelectedBudgetCategory(category);
+        setSelectedCategoryBudget(existingBudget || null);
+        setOpenBudgetModal(true);
+    };
+
+    const handleSaveBudget = async (categoryId, monthlyLimit) => {
+        try {
+            const response = await axiosConfig.post(API_ENDPOINTS.SAVE_BUDGET, {
+                categoryId,
+                monthlyLimit
+            });
+            if (response.status === 200 || response.status === 201) {
+                toast.success("Budget saved successfully!");
+                await fetchBudgets();
+            }
+        } catch (err) {
+            console.error("Error saving budget:", err);
+            toast.error(err.response?.data?.message || "Failed to save budget.");
+        }
+    };
+
+    const handleDeleteBudget = async (budgetId) => {
+        try {
+            await axiosConfig.delete(API_ENDPOINTS.DELETE_BUDGET(budgetId));
+            toast.success("Budget removed.");
+            await fetchBudgets();
+        } catch (err) {
+            console.error("Error deleting budget:", err);
+            toast.error("Failed to remove budget.");
+        }
     };
 
     const handleUpdateCategory = async (updatedCategory) => {
@@ -132,7 +188,9 @@ const Category = () => {
                 {!loading && !error && (
                     <CategoryList
                         categories={categoryData}
+                        budgets={budgets}
                         onEditCategory={handleEditCategory}
+                        onSetBudget={handleOpenBudgetModal}
                         onAddCategory={() => setOpenAddCategoryModal(true)}
                     />
                 )}
@@ -161,6 +219,20 @@ const Category = () => {
                         isEditing={true}
                     />
                 </Modal>
+
+                {/* Set Budget Modal */}
+                <SetBudgetModal
+                    isOpen={openBudgetModal}
+                    onClose={() => {
+                        setOpenBudgetModal(false);
+                        setSelectedBudgetCategory(null);
+                        setSelectedCategoryBudget(null);
+                    }}
+                    category={selectedBudgetCategory}
+                    currentBudget={selectedCategoryBudget}
+                    onSaveBudget={handleSaveBudget}
+                    onDeleteBudget={handleDeleteBudget}
+                />
             </div>
         </Dashboard>
     );

@@ -4,6 +4,7 @@ import com.example.money_manager.dto.request.ExpenseDTO;
 import com.example.money_manager.dto.request.IncomeDTO;
 import com.example.money_manager.dto.request.RecentTransactionDTO;
 import com.example.money_manager.entity.ProfileEntity;
+import com.example.money_manager.service.BudgetService;
 import com.example.money_manager.service.DashboardService;
 import com.example.money_manager.service.ExpenseService;
 import com.example.money_manager.service.IncomeService;
@@ -11,6 +12,8 @@ import com.example.money_manager.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +29,11 @@ public class DashboardServiceImpl implements DashboardService {
     private final IncomeService incomeService;
     private final ExpenseService expenseService;
     private final ProfileService profileService;
+    private final BudgetService budgetService;
 
     public Map<String, Object> getDashboardData() {
         ProfileEntity profile = profileService.getCurrentProfile();
+
         Map<String, Object> returnValue = new LinkedHashMap<>();
         List<IncomeDTO> latestIncomes = incomeService.getLatest5IncomesForCurrentUser();
         List<ExpenseDTO> latestExpenses = expenseService.getLatest5ExpensesForCurrentUser();
@@ -63,6 +68,9 @@ public class DashboardServiceImpl implements DashboardService {
                     }
                     return cmp;
                 }).collect(Collectors.toList());
+
+        String currentMonth = YearMonth.now().format(DateTimeFormatter.ofPattern("yyyy-MM"));
+
         returnValue.put("totalBalance",
                 incomeService.getTotalIncomeForCurrentUser()
                         .subtract(expenseService.getTotalExpenseForCurrentUser()));
@@ -71,7 +79,8 @@ public class DashboardServiceImpl implements DashboardService {
         returnValue.put("recent5Expenses", latestExpenses);
         returnValue.put("recent5Incomes", latestIncomes);
         returnValue.put("recentTransactions", recentTransactions);
+        returnValue.put("budgets", budgetService.getBudgetsForMonth(currentMonth));
         return returnValue;
     }
-
 }
+
