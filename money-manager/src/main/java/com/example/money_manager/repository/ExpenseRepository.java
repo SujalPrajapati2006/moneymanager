@@ -37,5 +37,7 @@ public interface ExpenseRepository extends JpaRepository<ExpenseEntity, Long> {
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate
     );
+
+    List<ExpenseEntity> findByIsRecurringTrueAndNextDueDateLessThanEqual(LocalDate maxDueDate);
 }
 

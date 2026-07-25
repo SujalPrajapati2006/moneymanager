@@ -12,6 +12,9 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
         amount: "",
         date: "",
         icon: "", // Icon might be associated with the selected category, or kept separate for custom entries
+        isRecurring: false,
+        recurrenceFrequency: "monthly",
+        recurrenceEndDate: "",
     });
     const [loading, setLoading] = useState(false);
 
@@ -79,6 +82,42 @@ const AddExpenseForm = ({ onAddExpense, categories }) => {
                 placeholder=""
                 type="date"
             />
+
+            <div className="flex items-center gap-3 my-4 p-3 bg-purple-50/60 rounded-lg border border-purple-100">
+                <input
+                    type="checkbox"
+                    id="expense-is-recurring"
+                    checked={expense.isRecurring}
+                    onChange={(e) => handleChange("isRecurring", e.target.checked)}
+                    className="w-4 h-4 text-purple-600 rounded focus:ring-purple-500 border-gray-300 cursor-pointer"
+                />
+                <label htmlFor="expense-is-recurring" className="text-sm font-medium text-gray-700 cursor-pointer select-none">
+                    Repeat this transaction (Recurring)
+                </label>
+            </div>
+
+            {expense.isRecurring && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Input
+                        label="Frequency"
+                        value={expense.recurrenceFrequency}
+                        onChange={({ target }) => handleChange("recurrenceFrequency", target.value)}
+                        isSelect={true}
+                        options={[
+                            { value: "weekly", label: "Weekly" },
+                            { value: "monthly", label: "Monthly" },
+                            { value: "yearly", label: "Yearly" },
+                        ]}
+                    />
+                    <Input
+                        value={expense.recurrenceEndDate}
+                        onChange={({ target }) => handleChange("recurrenceEndDate", target.value)}
+                        label="End Date (Optional)"
+                        placeholder=""
+                        type="date"
+                    />
+                </div>
+            )}
 
             <div className="flex justify-end mt-6">
                 <Button

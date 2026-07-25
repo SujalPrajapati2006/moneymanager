@@ -1,7 +1,7 @@
-import {Trash2, TrendingDown, TrendingUp, UtensilsCrossed} from "lucide-react";
+import {Repeat, Trash2, TrendingDown, TrendingUp, UtensilsCrossed} from "lucide-react";
 import {formatCurrency} from "../util/util.js";
 
-const TransactionInfoCard = ({icon, title, date, amount, type, hideDeleteBtn, onDelete}) => {
+const TransactionInfoCard = ({icon, title, date, amount, type, isRecurring, recurrenceFrequency, hideDeleteBtn, onDelete}) => {
     const getAmountStyles = () => type === 'income'? 'bg-green-50  text-green-800': 'bg-red-50 text-red-800';
     return (
         <div className="group relative flex items-center gap-4 mt-2 p-3 rounded-lg hover:bg-gray-100/60">
@@ -15,7 +15,15 @@ const TransactionInfoCard = ({icon, title, date, amount, type, hideDeleteBtn, on
 
             <div className="flex-1 flex items-center justify-between">
                 <div>
-                    <p className="text-sm text-gray-700 font-medium">{title}</p>
+                    <div className="flex items-center gap-1.5">
+                        <p className="text-sm text-gray-700 font-medium">{title}</p>
+                        {isRecurring && (
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-purple-100 text-purple-700 capitalize" title={`Recurring (${recurrenceFrequency || 'monthly'})`}>
+                                <Repeat size={11} />
+                                {recurrenceFrequency || 'Recurring'}
+                            </span>
+                        )}
+                    </div>
                     <p className="text-xs text-gray-400 mt-1">{date}</p>
                 </div>
 

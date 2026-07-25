@@ -22,6 +22,8 @@ const RecentTransactions = ({transactions, onMore}) => {
                         date={moment(item.date).format("Do MMM YYYY")}
                         amount={item.amount}
                         type={item.type}
+                        isRecurring={item.isRecurring}
+                        recurrenceFrequency={item.recurrenceFrequency}
                         hideDeleteBtn
                     />
                 ))}

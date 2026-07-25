@@ -21,6 +21,10 @@ public class IncomeDTO {
     private Long categoryId;
     private BigDecimal amount;
     private LocalDate date;
+    private Boolean isRecurring;
+    private String recurrenceFrequency;
+    private LocalDate nextDueDate;
+    private LocalDate recurrenceEndDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

@@ -39,6 +39,19 @@ public class IncomeEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "is_recurring", nullable = false)
+    @Builder.Default
+    private Boolean isRecurring = false;
+
+    @Column(name = "recurrence_frequency")
+    private String recurrenceFrequency;
+
+    @Column(name = "next_due_date")
+    private LocalDate nextDueDate;
+
+    @Column(name = "recurrence_end_date")
+    private LocalDate recurrenceEndDate;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryEntity category;

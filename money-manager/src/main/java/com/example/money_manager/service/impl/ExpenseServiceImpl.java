@@ -89,14 +89,32 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     //helper methods
     private ExpenseEntity toEntity(ExpenseDTO dto, ProfileEntity profile, CategoryEntity category) {
+        boolean isRecurring = Boolean.TRUE.equals(dto.getIsRecurring());
+        LocalDate txDate = dto.getDate() != null ? dto.getDate() : LocalDate.now();
+        LocalDate nextDue = isRecurring ? (dto.getNextDueDate() != null ? dto.getNextDueDate() : calculateNextDueDate(txDate, dto.getRecurrenceFrequency())) : null;
+
         return ExpenseEntity.builder()
                 .name(dto.getName())
                 .icon(dto.getIcon())
                 .amount(dto.getAmount())
-                .date(dto.getDate())
+                .date(txDate)
+                .isRecurring(isRecurring)
+                .recurrenceFrequency(isRecurring ? dto.getRecurrenceFrequency() : null)
+                .nextDueDate(nextDue)
+                .recurrenceEndDate(isRecurring ? dto.getRecurrenceEndDate() : null)
                 .profile(profile)
                 .category(category)
                 .build();
+    }
+
+    private LocalDate calculateNextDueDate(LocalDate date, String frequency) {
+        if (date == null || frequency == null) return null;
+        return switch (frequency.toLowerCase()) {
+            case "weekly" -> date.plusWeeks(1);
+            case "monthly" -> date.plusMonths(1);
+            case "yearly" -> date.plusYears(1);
+            default -> date.plusMonths(1);
+        };
     }
 
     private ExpenseDTO toDTO(ExpenseEntity entity) {
@@ -108,6 +126,10 @@ public class ExpenseServiceImpl implements ExpenseService {
                 .categoryName(entity.getCategory() != null ? entity.getCategory().getName(): "N/A")
                 .amount(entity.getAmount())
                 .date(entity.getDate())
+                .isRecurring(entity.getIsRecurring())
+                .recurrenceFrequency(entity.getRecurrenceFrequency())
+                .nextDueDate(entity.getNextDueDate())
+                .recurrenceEndDate(entity.getRecurrenceEndDate())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
