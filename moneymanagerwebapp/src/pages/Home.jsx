@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import RecentTransactions from "../components/RecentTransactions.jsx";
 import FinanceOverview from "../components/FinanceOverview.jsx";
 import BudgetOverviewWidget from "../components/BudgetOverviewWidget.jsx";
+import InsightsWidget from "../components/InsightsWidget.jsx";
 import {LoadingState, ErrorState} from "../components/StateCard.jsx";
 
 const Home = () => {
@@ -125,6 +126,9 @@ const Home = () => {
 
                             {/* Budget Overview Widget & Exceeded Warning Banner */}
                             <BudgetOverviewWidget budgets={dashboardData?.budgets || []} />
+
+                            {/* Smart Financial Insights Widget */}
+                            <InsightsWidget insightsData={dashboardData?.insights} />
 
                             {/* Main Dashboard Section */}
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

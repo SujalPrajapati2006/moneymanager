@@ -8,6 +8,7 @@ import com.example.money_manager.service.BudgetService;
 import com.example.money_manager.service.DashboardService;
 import com.example.money_manager.service.ExpenseService;
 import com.example.money_manager.service.IncomeService;
+import com.example.money_manager.service.InsightService;
 import com.example.money_manager.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ public class DashboardServiceImpl implements DashboardService {
     private final ExpenseService expenseService;
     private final ProfileService profileService;
     private final BudgetService budgetService;
+    private final InsightService insightService;
 
     @Override
     public Map<String, Object> getDashboardData() {
@@ -103,6 +105,7 @@ public class DashboardServiceImpl implements DashboardService {
         returnValue.put("recent5Incomes", latestIncomes);
         returnValue.put("recentTransactions", recentTransactions);
         returnValue.put("budgets", budgetService.getBudgetsForMonth(currentMonth));
+        returnValue.put("insights", insightService.generateInsightsForCurrentUser(accountId));
         return returnValue;
     }
 }
