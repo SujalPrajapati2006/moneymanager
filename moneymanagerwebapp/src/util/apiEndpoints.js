@@ -28,5 +28,13 @@ export const API_ENDPOINTS = {
     ADD_ACCOUNT: "/accounts",
     UPDATE_ACCOUNT: (accountId) => `/accounts/${accountId}`,
     DELETE_ACCOUNT: (accountId, reassignId) => reassignId ? `/accounts/${accountId}?reassignAccountId=${reassignId}` : `/accounts/${accountId}`,
+    GET_BILLS: "/bills",
+    ADD_BILL: "/bills",
+    PAY_BILL: (billId, accountId, createExpense) => {
+        let url = `/bills/${billId}/pay?createExpense=${createExpense ? 'true' : 'false'}`;
+        if (accountId) url += `&accountId=${accountId}`;
+        return url;
+    },
+    DELETE_BILL: (billId) => `/bills/${billId}`,
     UPLOAD_IMAGE: `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`
 };

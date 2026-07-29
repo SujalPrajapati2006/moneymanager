@@ -4,6 +4,7 @@ import com.example.money_manager.dto.request.ExpenseDTO;
 import com.example.money_manager.dto.request.IncomeDTO;
 import com.example.money_manager.dto.request.RecentTransactionDTO;
 import com.example.money_manager.entity.ProfileEntity;
+import com.example.money_manager.service.BillService;
 import com.example.money_manager.service.BudgetService;
 import com.example.money_manager.service.DashboardService;
 import com.example.money_manager.service.ExpenseService;
@@ -33,6 +34,7 @@ public class DashboardServiceImpl implements DashboardService {
     private final ProfileService profileService;
     private final BudgetService budgetService;
     private final InsightService insightService;
+    private final BillService billService;
 
     @Override
     public Map<String, Object> getDashboardData() {
@@ -106,6 +108,7 @@ public class DashboardServiceImpl implements DashboardService {
         returnValue.put("recentTransactions", recentTransactions);
         returnValue.put("budgets", budgetService.getBudgetsForMonth(currentMonth));
         returnValue.put("insights", insightService.generateInsightsForCurrentUser(accountId));
+        returnValue.put("upcomingBills", billService.getUpcoming3UnpaidBillsForCurrentUser());
         return returnValue;
     }
 }

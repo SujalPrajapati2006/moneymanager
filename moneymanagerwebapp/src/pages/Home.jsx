@@ -11,6 +11,7 @@ import RecentTransactions from "../components/RecentTransactions.jsx";
 import FinanceOverview from "../components/FinanceOverview.jsx";
 import BudgetOverviewWidget from "../components/BudgetOverviewWidget.jsx";
 import InsightsWidget from "../components/InsightsWidget.jsx";
+import UpcomingBillsWidget from "../components/UpcomingBillsWidget.jsx";
 import {LoadingState, ErrorState} from "../components/StateCard.jsx";
 
 const Home = () => {
@@ -129,6 +130,9 @@ const Home = () => {
 
                             {/* Smart Financial Insights Widget */}
                             <InsightsWidget insightsData={dashboardData?.insights} />
+
+                            {/* Upcoming Bills Reminder Widget */}
+                            <UpcomingBillsWidget bills={dashboardData?.upcomingBills || []} />
 
                             {/* Main Dashboard Section */}
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
