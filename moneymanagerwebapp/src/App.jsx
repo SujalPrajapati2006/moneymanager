@@ -5,6 +5,7 @@ import Expense from "./pages/Expense.jsx";
 import Category from "./pages/Category.jsx";
 import Accounts from "./pages/Accounts.jsx";
 import Filter from "./pages/Filter.jsx";
+import Bills from "./pages/Bills.jsx";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import AboutUs from "./pages/AboutUs";
@@ -22,6 +23,7 @@ const App = () => {
                     <Route path="/home" element={<LandingPage />} />
                     <Route path="/dashboard" element={<Home />} />
                     <Route path="/accounts" element={<Accounts />} />
+                    <Route path="/bills" element={<Bills />} />
                     <Route path="/income" element={<Income />} />
                     <Route path="/expense" element={<Expense />} />
                     <Route path="/category" element={<Category />} />
