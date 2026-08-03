@@ -285,9 +285,8 @@ const Bills = () => {
                                         return (
                                             <div
                                                 key={bill.id}
-                                                className={`p-4 rounded-xl border transition-all flex flex-col justify-between ${
-                                                    badge.isOverdue ? "bg-red-50/40 border-red-200" : "bg-gray-50/70 border-gray-100"
-                                                }`}
+                                                className={`p-4 rounded-xl border transition-all flex flex-col justify-between ${badge.isOverdue ? "bg-red-50/40 border-red-200" : "bg-gray-50/70 border-gray-100"
+                                                    }`}
                                             >
                                                 <div>
                                                     <div className="flex items-start justify-between gap-2 mb-2">
