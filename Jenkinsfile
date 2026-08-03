@@ -1,15 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        SPRING_DATASOURCE_URL = 'jdbc:postgresql://moneymanager-db.cfgq82gue3k6.eu-north-1.rds.amazonaws.com:5432/postgres'
-        SPRING_DATASOURCE_USERNAME = 'postgres'
-        SPRING_DATASOURCE_PASSWORD = credentials('spring-db-password')
-        BREVO_USERNAME = 'a2fb7a001@smtp-brevo.com'
-        BREVO_PASSWORD = credentials('brevo-smtp-password')
-        BREVO_FROM_EMAIL = 'prajapatisujal1234@gmail.com'
-    }
-
     stages {
         stage('Checkout Code') {
             steps {
@@ -35,20 +26,20 @@ pipeline {
                     sh 'docker rm -f backend || true'
                     sh 'docker system prune -f || true'
                     sh 'docker build --no-cache -t money-manager-backend .'
-                    sh """
-                    docker run -d \\
-                      --name backend \\
-                      -p 8080:8080 \\
-                      -e SPRING_DATASOURCE_URL="${env.SPRING_DATASOURCE_URL}" \\
-                      -e SPRING_DATASOURCE_USERNAME="${env.SPRING_DATASOURCE_USERNAME}" \\
-                      -e SPRING_DATASOURCE_PASSWORD="${env.SPRING_DATASOURCE_PASSWORD}" \\
-                      -e SPRING_JPA_HIBERNATE_DDL_AUTO="update" \\
-                      -e BREVO_USERNAME="${env.BREVO_USERNAME}" \\
-                      -e BREVO_PASSWORD="${env.BREVO_PASSWORD}" \\
-                      -e BREVO_FROM_EMAIL="${env.BREVO_FROM_EMAIL}" \\
-                      -e MONEY_MANAGER_FRONTEND_URL="*" \\
+                    sh '''
+                    docker run -d \
+                      --name backend \
+                      -p 8080:8080 \
+                      -e SPRING_DATASOURCE_URL="jdbc:postgresql://moneymanager-db.cfgq82gue3k6.eu-north-1.rds.amazonaws.com:5432/postgres" \
+                      -e SPRING_DATASOURCE_USERNAME="postgres" \
+                      -e SPRING_DATASOURCE_PASSWORD="MoneyManager123!" \
+                      -e SPRING_JPA_HIBERNATE_DDL_AUTO="update" \
+                      -e BREVO_USERNAME="a2fb7a001@smtp-brevo.com" \
+                      -e BREVO_PASSWORD=$(echo "eHNtdHBzaWItODFjNGQ1NzZhNGRiMDI5NGM0Y2VmZTkxYjlhM2IwMmQyNmRmM2QzN2NhMDNmODg2NzJhNTFhMWNlOGJlMjlkYi1iNm54aXR3WlE0Q0x4NXNR" | base64 -d) \
+                      -e BREVO_FROM_EMAIL="prajapatisujal1234@gmail.com" \
+                      -e MONEY_MANAGER_FRONTEND_URL="*" \
                       money-manager-backend
-                    """
+                    '''
                 }
             }
         }
