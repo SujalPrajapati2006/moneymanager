@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        MAVEN_OPTS = '-Xmx256m -XX:MaxMetaspaceSize=128m'
+    }
+
     stages {
         stage('Checkout Code') {
             steps {
@@ -11,7 +15,7 @@ pipeline {
 
         stage('Build Spring Boot JAR') {
             steps {
-                echo 'Compiling Java application with Maven...'
+                echo 'Compiling Java application with Maven (low memory mode)...'
                 dir('money-manager') {
                     sh 'chmod +x mvnw'
                     sh './mvnw clean package -DskipTests'
