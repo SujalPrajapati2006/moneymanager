@@ -50,6 +50,11 @@ pipeline {
     }
 
     post {
+        always {
+            dir('money-manager') {
+                sh 'rm -rf target || true'
+            }
+        }
         success {
             echo '🎉 Backend deployment via Jenkins Pipeline completed successfully!'
         }
