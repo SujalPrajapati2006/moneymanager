@@ -28,7 +28,7 @@ pipeline {
                 echo 'Building Docker container and deploying to EC2...'
                 dir('money-manager') {
                     sh 'docker rm -f backend || true'
-                    sh 'docker system prune -f || true'
+                    sh 'docker system prune -af || true'
                     sh 'docker build --no-cache -t money-manager-backend .'
                     sh '''
                     docker run -d \
