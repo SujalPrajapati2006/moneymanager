@@ -12,6 +12,9 @@ import java.util.Map;
 public class HealthController {
     @GetMapping({"/health", "/status"})
     public ResponseEntity<Map<String, String>> healthCheck() {
-        return ResponseEntity.ok(Map.of("status", "UP", "message", "Money Manager Backend is running"));
+        return ResponseEntity.ok(Map.of(
+            "status", "UP", 
+            "message", "Money Manager Backend is running smoothly via Jenkins CI/CD Pipeline!"
+        ));
     }
 }
